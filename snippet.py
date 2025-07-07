@@ -26,8 +26,8 @@ class Snippet:
         if not self.__begin_statement_line.startswith(self.BEGIN_STATEMENT):
             self.__raise_begin_statement_format_error()
         end_line = self.__snippet_lines[-1].strip()
-        if not end_line == self.END_STATEMENT:
-            raise SnippetError(f"The end statement '{end_line}' should be '{self.END_STATEMENT}'")
+        if not end_line.endswith(self.END_STATEMENT):
+            raise SnippetError(f"The end statement line '{end_line}' should end with '{self.END_STATEMENT}'")
 
     def __raise_begin_statement_format_error(self):
         raise SnippetError(f"The begin statement '{self.__begin_statement_line}' should be on the format '{self.BEGIN_STATEMENT} <name>'")

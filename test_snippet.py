@@ -8,11 +8,11 @@ class TestSnippet(unittest.TestCase):
             "",
             "BEGIN SNIPPET",
             "BEGIN SNIPPET \n END SNIPPET",
-            "BEGIN SNIPPET \n\n END SNIPPET",
-            "BEGIN SNIPPET name code END SNIPPET",
-            "BEGIN SNIPPET name name2\n code\n END SNIPPET",
-            "something BEGIN SNIPPET name\n code\n END SNIPPET",
-            "BEGIN SNIPPET name\n code\n END SNIPPET name"]
+            "BEGIN SNIPPET \n\n # END SNIPPET",
+            "BEGIN SNIPPET name code # END SNIPPET",
+            "BEGIN SNIPPET name name2\n code\n # END SNIPPET",
+            "something BEGIN SNIPPET name\n code\n # END SNIPPET",
+            "BEGIN SNIPPET name\n code\n # END SNIPPET name"]
         for snippet_string in invalid_inputs:
             self.assertRaises(SnippetError, Snippet, snippet_string)
         self.assertRaises(TypeError, Snippet, 1)
@@ -28,7 +28,7 @@ class TestSnippet(unittest.TestCase):
         expected_content = """def greet(name):
     print(f"Hello, {name}!")
 greet("Alice")"""
-        snippet_string = "BEGIN SNIPPET name\n" + expected_content + "\nEND SNIPPET"
+        snippet_string = "BEGIN SNIPPET name\n" + expected_content + "\n# END SNIPPET"
         actual_content = Snippet(snippet_string).content
         self.assertEqual(expected_content, actual_content)
         
