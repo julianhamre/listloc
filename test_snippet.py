@@ -25,13 +25,18 @@ class TestSnippet(unittest.TestCase):
         self.assertEqual(expected_name, actual_name)
 
     def test_content(self):
-        expected_content = """def greet(name):
-    print(f"Hello, {name}!")
-greet("Alice")"""
-        snippet_string = "BEGIN SNIPPET name\n" + expected_content + "\n# END SNIPPET"
+        snippet_strings = ["BEGIN SNIPPET name\n\nprint('hello')\n\n\n  # END SNIPPET",
+                           "BEGIN SNIPPET name2 \n    print('Hello world')\n\n % END SNIPPET",
+                           "BEGIN SNIPPET NaMe_03\n\n\n    print('one')\n\n\n\nprint('two')\n    a = 1 + 2\n# END SNIPPET"]
+        expected_content_strings = ["print('hello')", 
+                                    "    print('Hello world')",
+                                    "    print('one')\n\n\n\nprint('two')\n    a = 1 + 2"]
+        for i in range(len(snippet_strings)):
+            self.__assert_correct_content(snippet_strings[i], expected_content_strings[i])
+
+    def __assert_correct_content(self, snippet_string, expected_content):
         actual_content = Snippet(snippet_string).content
         self.assertEqual(expected_content, actual_content)
-        
 
 if __name__ == "__main__":
     unittest.main()
