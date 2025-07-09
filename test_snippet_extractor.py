@@ -49,6 +49,7 @@ farewell('Bob')
     @classmethod
     def tearDownClass(cls):
         os.remove(cls.__EXAMPLE_CODE_FILE_NAME)
+        cls.__snippet_extractor.delete_snippet_directory_if_present()
 
     def test_extract_from(self):
         actual_snippet_strings = self.__extract_snippet_file_contents()

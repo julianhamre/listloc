@@ -1,6 +1,7 @@
 import re
 import os
 from snippet import Snippet
+import shutil
 
 class SnippetExtractor:
     DIRECTORY_NAME = "code_snippets"
@@ -46,3 +47,7 @@ class SnippetExtractor:
         write_path = f"{self.__snippet_directory_path}/{snippet.name}.txt"
         with open(write_path, "wt", encoding="utf-8") as f:
             f.write(snippet.content)
+
+    def delete_snippet_directory_if_present(self):
+        if os.path.isdir(self.__snippet_directory_path):
+            shutil.rmtree(self.__snippet_directory_path)
