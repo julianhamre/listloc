@@ -51,7 +51,7 @@ farewell('Bob')
         os.remove(cls.__EXAMPLE_CODE_FILE_NAME)
         cls.__snippet_extractor.delete_snippet_directory_if_present()
 
-    def test_extract_from(self):
+    def test_extract_snippets(self):
         actual_snippet_strings = self.__extract_snippet_file_contents()
         self.assertEqual(self.__EXPECTED_SNIPPET_STRINGS, actual_snippet_strings)
 
