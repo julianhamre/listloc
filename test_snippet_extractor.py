@@ -43,7 +43,8 @@ farewell('Bob')
     def setUpClass(cls):
         with open(cls.__EXAMPLE_CODE_FILE_NAME, "wt", encoding="utf-8") as f:
             f.write(cls.__EXAMPLE_CODE)
-        SnippetExtractor().extract_from(f"./{cls.__EXAMPLE_CODE_FILE_NAME}")
+        cls.__snippet_extractor = SnippetExtractor(f"./{cls.__EXAMPLE_CODE_FILE_NAME}")
+        cls.__snippet_extractor.extract_snippets()
 
     @classmethod
     def tearDownClass(cls):
