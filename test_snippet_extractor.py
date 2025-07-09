@@ -56,7 +56,7 @@ farewell('Bob')
         self.assertEqual(self.__EXPECTED_SNIPPET_STRINGS, actual_snippet_strings)
 
     def __extract_snippet_file_contents(self):
-        path_to_dir = f"./{SnippetExtractor.DIRECTORY_NAME}"
+        path_to_dir = f"./{SnippetExtractor.SNIPPET_DIRECTORY_NAME}"
         snippet_files = os.listdir(path_to_dir)
         snippet_strings = {}
         for file in snippet_files:

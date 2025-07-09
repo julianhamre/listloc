@@ -4,12 +4,12 @@ from snippet import Snippet
 import shutil
 
 class SnippetExtractor:
-    DIRECTORY_NAME = "code_snippets"
+    SNIPPET_DIRECTORY_NAME = "code_snippets"
 
     def __init__(self, source_file_path):
         self.__source_file_path = source_file_path
         self.__parent_directory_path = os.path.dirname(self.__source_file_path)
-        self.__snippet_directory_path =  f"{self.__parent_directory_path}/{self.DIRECTORY_NAME}"
+        self.__snippet_directory_path = f"{self.__parent_directory_path}/{self.SNIPPET_DIRECTORY_NAME}"
 
     def extract_snippets(self):
         """
@@ -20,9 +20,9 @@ class SnippetExtractor:
         The <name> argument decides the snippet file names.
         """
         with open(self.__source_file_path, "rt", encoding="utf-8") as f:
-            code = f.read()
+            source_code = f.read()
             pattern = f"{Snippet.BEGIN_STATEMENT}.*?{Snippet.END_STATEMENT}"
-            snippet_strings = re.findall(pattern, code, flags=re.DOTALL)
+            snippet_strings = re.findall(pattern, source_code, flags=re.DOTALL)
             snippets = self.__construct_snippets(snippet_strings)
             self.__write_snippet_files(snippets)
     
