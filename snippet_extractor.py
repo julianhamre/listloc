@@ -33,7 +33,8 @@ class SnippetExtractor:
         return snippets
    
     def __write_snippet_files(self, snippets):
-        self.__create_directory_if_absent()
+        if snippets:
+            self.__create_directory_if_absent()
         for snippet in snippets:
             self.__write_snippet_file(snippet)
 
