@@ -47,8 +47,6 @@ farewell('Bob')
         
     def test_extract_from(self):
         actual_snippet_strings = self.__extract_snippet_file_contents()
-        print("EXPECTED SNIPPET STRINGS: ", self.__EXPECTED_SNIPPET_STRINGS)
-        print("ACTUAL SNIPPET STRINGS: ", actual_snippet_strings)
         self.assertEqual(self.__EXPECTED_SNIPPET_STRINGS, actual_snippet_strings)
 
     def __extract_snippet_file_contents(self):
