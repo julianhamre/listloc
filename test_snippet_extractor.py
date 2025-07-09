@@ -44,7 +44,11 @@ farewell('Bob')
         with open(cls.__EXAMPLE_CODE_FILE_NAME, "wt", encoding="utf-8") as f:
             f.write(cls.__EXAMPLE_CODE)
         SnippetExtractor().extract_from(f"./{cls.__EXAMPLE_CODE_FILE_NAME}")
-        
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove(cls.__EXAMPLE_CODE_FILE_NAME)
+
     def test_extract_from(self):
         actual_snippet_strings = self.__extract_snippet_file_contents()
         self.assertEqual(self.__EXPECTED_SNIPPET_STRINGS, actual_snippet_strings)
