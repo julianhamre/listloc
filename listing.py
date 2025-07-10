@@ -1,23 +1,23 @@
-class Snippet:
-    BEGIN_STATEMENT = "BEGIN SNIPPET"
-    END_STATEMENT = "END SNIPPET"
+class Listing:
+    BEGIN_STATEMENT = "BEGIN LISTING"
+    END_STATEMENT = "END LISTING"
 
-    def __init__(self, snippet_string: str):
-        self.__validate_input_string(snippet_string)
-        self.__snippet_lines = snippet_string.splitlines()
-        self.__begin_statement_line = self.__snippet_lines[0].strip()
+    def __init__(self, listing_string: str):
+        self.__validate_input_string(listing_string)
+        self.__listing_lines = listing_string.splitlines()
+        self.__begin_statement_line = self.__listing_lines[0].strip()
         self.__begin_statement_keywords = self.__begin_statement_line.split(" ")
         self.__content = self.__extract_content()
-        self.__validate_snippet()
+        self.__validate_listing()
 
-    def __validate_input_string(self, snippet_string):
-        if not isinstance(snippet_string, str):
-            raise TypeError("The snippet_string must be a string")
-        if snippet_string == "":
-            raise SnippetError("The snippet_string cannot be empty")
+    def __validate_input_string(self, listing_string):
+        if not isinstance(listing_string, str):
+            raise TypeError("The listing_string must be a string")
+        if listing_string == "":
+            raise ListingError("The listing_string cannot be empty")
         
     def __extract_content(self):
-        statement_lines_removed = self.__snippet_lines[1:-1]
+        statement_lines_removed = self.__listing_lines[1:-1]
         content_lines = self.__surrounding_empty_lines_removed(statement_lines_removed)
         return "\n".join(content_lines)
     
@@ -31,7 +31,7 @@ class Snippet:
             lines_copy = lines_copy[:-1]
         return lines_copy
     
-    def __validate_snippet(self):
+    def __validate_listing(self):
         self.__validate_statement_lines()
         self.__validate_content()
 
@@ -40,16 +40,16 @@ class Snippet:
             self.__raise_begin_statement_format_error()
         if not self.__begin_statement_line.startswith(self.BEGIN_STATEMENT):
             self.__raise_begin_statement_format_error()
-        end_line = self.__snippet_lines[-1].strip()
+        end_line = self.__listing_lines[-1].strip()
         if not end_line.endswith(self.END_STATEMENT):
-            raise SnippetError(f"The end statement line '{end_line}' should end with '{self.END_STATEMENT}'")
+            raise ListingError(f"The end statement line '{end_line}' should end with '{self.END_STATEMENT}'")
 
     def __raise_begin_statement_format_error(self):
-        raise SnippetError(f"The begin statement '{self.__begin_statement_line}' should be on the format '{self.BEGIN_STATEMENT} <name>'")
+        raise ListingError(f"The begin statement '{self.__begin_statement_line}' should be on the format '{self.BEGIN_STATEMENT} <name>'")
 
     def __validate_content(self):
         if self.__content == "":
-            raise SnippetError(f"The snippet content cannot be empty")
+            raise ListingError(f"The listing content cannot be empty")
 
     @property
     def name(self):
@@ -60,7 +60,7 @@ class Snippet:
         return self.__content
     
 
-class SnippetError(Exception):
+class ListingError(Exception):
 
     def __init__(self, message):
         super().__init__(message)
