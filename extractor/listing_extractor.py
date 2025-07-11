@@ -1,5 +1,5 @@
 import os
-from file_extractor import FileExtractor
+from extractor.file_extractor import FileExtractor
 
 
 class ListingExtractor:

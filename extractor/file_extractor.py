@@ -1,6 +1,6 @@
 import re
 import os
-from listing import Listing
+from extractor.listing import Listing
 import shutil
 
 class FileExtractor:

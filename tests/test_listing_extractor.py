@@ -1,8 +1,8 @@
 import unittest
 import os
 import shutil
-from listing_extractor import ListingExtractor
-from file_extractor import FileExtractor
+from extractor.listing_extractor import ListingExtractor
+from extractor.file_extractor import FileExtractor
 
 class TestListingExtractor(unittest.TestCase):
 
