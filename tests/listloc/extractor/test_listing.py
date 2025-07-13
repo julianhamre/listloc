@@ -1,5 +1,5 @@
 import unittest
-from extractor.listing import Listing, ListingError
+from src.listloc.extractor.listing import Listing, ListingError
 
 class TestListing(unittest.TestCase):
 

@@ -1,6 +1,6 @@
 import unittest
 import os
-from extractor.file_extractor import FileExtractor
+from src.listloc.extractor.file_extractor import FileExtractor
 
 class TestFileExtractor(unittest.TestCase):
     __EXAMPLE_CODE_FILE_NAME = "temp_code.py"

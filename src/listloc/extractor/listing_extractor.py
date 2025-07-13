@@ -1,6 +1,6 @@
 import os
 import shutil
-from extractor.file_extractor import FileExtractor
+from src.listloc.extractor.file_extractor import FileExtractor
 
 
 class ListingExtractor:
