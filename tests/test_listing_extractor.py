@@ -20,6 +20,10 @@ class TestListingExtractor(unittest.TestCase):
             file_path = f"{cls.__BASE_DIRECTORY_PATH}/{file}"
             with open(file_path, "wt", encoding="utf-8") as f:
                 f.write(listing_string)
+        unclean_listing_directory = f"{cls.__BASE_DIRECTORY_PATH}/dir1/dir2/{FileExtractor.LISTING_DIRECTORY_NAME}"
+        os.mkdir(unclean_listing_directory)
+        with open(f"{unclean_listing_directory}/something_else.txt", "wt") as f:
+            f.write("Not a listing")
     
     @classmethod
     def __create_listing_string_dict(cls):
@@ -52,6 +56,25 @@ class TestListingExtractor(unittest.TestCase):
                  f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/dir4/{FileExtractor.LISTING_DIRECTORY_NAME}/file2_listing{FileExtractor.LISTING_FILE_EXTENSION}"
                  ]
         return paths
+    
+    def test_clear_all_listing_extractions(self):
+        listing_extractor = ListingExtractor(f"./{self.__BASE_DIRECTORY_PATH}")
+        listing_extractor.clear_all_listing_extractions()
+        for file_path in self.__listing_files_that_should_exist():
+            self.assertFalse(os.path.exists(file_path))
+        for directory_path in self.__listing_directories_that_should_have_been_deleted():
+            self.assertFalse(os.path.isdir(directory_path))
+        self.assertTrue(os.path.exists(f"{self.__BASE_DIRECTORY_PATH}/dir1/dir2/{FileExtractor.LISTING_DIRECTORY_NAME}/something_else.txt"))
+        for file in self.__FILES:
+            self.assertTrue(os.path.exists(f"{self.__BASE_DIRECTORY_PATH}/{file}"))
+    
+    def __listing_directories_that_should_have_been_deleted(self):
+        paths = [f"{self.__BASE_DIRECTORY_PATH}/{FileExtractor.LISTING_DIRECTORY_NAME}",
+                 f"{self.__BASE_DIRECTORY_PATH}/dir1/{FileExtractor.LISTING_DIRECTORY_NAME}",
+                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/dir4/{FileExtractor.LISTING_DIRECTORY_NAME}",
+                 ]
+        return paths
+
     
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,5 @@
 import os
+import shutil
 from extractor.file_extractor import FileExtractor
 
 
@@ -19,3 +20,42 @@ class ListingExtractor:
             for file in files:
                 file_paths.append(os.path.join(root, file))
         return file_paths
+    
+    def clear_all_listing_extractions(self):
+        directory_paths = self.__all_directory_paths()
+        for directory in directory_paths:
+            if not self.__is_listing_directory(directory):
+                return
+            if self.__only_contains_listing_files(directory):
+                shutil.rmtree(directory)
+                return
+            self.__delete_listing_files_in(directory)
+
+    def __all_directory_paths(self):
+        directory_paths = []
+        for root, dirs, files in os.walk(self.__base_directory_path):
+            for dir in dirs:
+                directory_paths.append(os.path.join(root, dir))
+        return directory_paths
+    
+    def __is_listing_directory(self, directory):
+        directory_name = os.path.basename(directory)
+        return directory_name == FileExtractor.LISTING_DIRECTORY_NAME
+
+    def __only_contains_listing_files(self, directory_path):
+        files = self.__files_in_directory(directory_path)
+        for file in files:
+            if not self.__is_listing_file(file):
+                return False
+        return True
+    
+    def __delete_listing_files_in(self, directory_path):
+        for file in self.__files_in_directory(directory_path):
+            if self.__is_listing_file(file):
+                os.remove(file)
+    
+    def __files_in_directory(self, directory_path):
+        return os.listdir(directory_path)
+
+    def __is_listing_file(self, file):
+        return file.endswith(FileExtractor.LISTING_FILE_EXTENSION)
