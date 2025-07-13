@@ -1,7 +1,7 @@
 import typer
 from typing_extensions import Annotated
 import os
-from extractor.listing_extractor import ListingExtractor
+from listloc.extractor.listing_extractor import ListingExtractor
 
 
 app = typer.Typer()
