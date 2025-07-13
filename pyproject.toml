@@ -11,6 +11,9 @@ dependencies = [
     "typer (>=0.16.0,<0.17.0)"
 ]
 
+[tool.poetry.scripts]
+listloc = "listloc.main:app"
+
 [tool.poetry]
 packages = [{include = "listloc", from = "src"}]
 
