@@ -4,9 +4,9 @@ from extractor.file_extractor import FileExtractor
 
 class TestFileExtractor(unittest.TestCase):
     __EXAMPLE_CODE_FILE_NAME = "temp_code.py"
-    __EXPECTED_LISTING_STRINGS = {"import.txt": "import os",
-                                  "greet.txt": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')",
-                                  "farewell.txt": "def farewell(name):\n    print(f'Goodbye, {name}.')\n\nfarewell('Bob')"
+    __EXPECTED_LISTING_STRINGS = {f"import{FileExtractor.LISTING_FILE_EXTENSION}": "import os",
+                                  f"greet{FileExtractor.LISTING_FILE_EXTENSION}": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')",
+                                  f"farewell{FileExtractor.LISTING_FILE_EXTENSION}": "def farewell(name):\n    print(f'Goodbye, {name}.')\n\nfarewell('Bob')"
 }
     __EXAMPLE_CODE = """# Some setup code
 

@@ -44,12 +44,12 @@ class TestListingExtractor(unittest.TestCase):
         self.assertFalse(os.path.isdir(f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/{FileExtractor.LISTING_DIRECTORY_NAME}"))
 
     def __listing_files_that_should_exist(self):
-        paths = [f"{self.__BASE_DIRECTORY_PATH}/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing.txt",
-                 f"{self.__BASE_DIRECTORY_PATH}/dir1/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing.txt",
-                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir2/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing.txt",
-                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir2/{FileExtractor.LISTING_DIRECTORY_NAME}/file2_listing.txt",
-                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/dir4/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing.txt",
-                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/dir4/{FileExtractor.LISTING_DIRECTORY_NAME}/file2_listing.txt"
+        paths = [f"{self.__BASE_DIRECTORY_PATH}/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing{FileExtractor.LISTING_FILE_EXTENSION}",
+                 f"{self.__BASE_DIRECTORY_PATH}/dir1/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing{FileExtractor.LISTING_FILE_EXTENSION}",
+                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir2/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing{FileExtractor.LISTING_FILE_EXTENSION}",
+                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir2/{FileExtractor.LISTING_DIRECTORY_NAME}/file2_listing{FileExtractor.LISTING_FILE_EXTENSION}",
+                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/dir4/{FileExtractor.LISTING_DIRECTORY_NAME}/file1_listing{FileExtractor.LISTING_FILE_EXTENSION}",
+                 f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/dir4/{FileExtractor.LISTING_DIRECTORY_NAME}/file2_listing{FileExtractor.LISTING_FILE_EXTENSION}"
                  ]
         return paths
     

@@ -5,6 +5,7 @@ import shutil
 
 class FileExtractor:
     LISTING_DIRECTORY_NAME = "listings"
+    LISTING_FILE_EXTENSION = ".listing"
 
     def __init__(self, source_file_path):
         self.__source_file_path = source_file_path
@@ -45,7 +46,7 @@ class FileExtractor:
             pass
 
     def __write_listing_file(self, listing):
-        write_path = f"{self.__listing_directory_path}/{listing.name}.txt"
+        write_path = f"{self.__listing_directory_path}/{listing.name}{self.LISTING_FILE_EXTENSION}"
         with open(write_path, "wt", encoding="utf-8") as f:
             f.write(listing.content)
 
