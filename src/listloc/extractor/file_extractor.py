@@ -19,16 +19,22 @@ class FileExtractor:
         located in the directory of the code file that is extracted from. A valid listing is 
         the content in between the statements 'BEGIN LISTING <name>' and 'END LISTING'. 
         The <name> argument decides the listing file names.
+
+        Returns:
+            True if any listing was extracted, False if not
         """
         if not self.__is_utf8_encoding():
-            return
+            return False
         with open(self.__source_file_path, "rt", encoding="utf-8") as f:
             source_code = f.read()
             pattern = f"{Listing.BEGIN_STATEMENT}.*?{Listing.END_STATEMENT}"
             listing_strings = re.findall(pattern, source_code, flags=re.DOTALL)
+            if not listing_strings:
+                return False
             listings = self.__construct_listings(listing_strings)
             self.__write_listing_files(listings)
-    
+            return True
+
     def __is_utf8_encoding(self, blocksize=8192):
         try:
             with open(self.__source_file_path, 'rb') as f:

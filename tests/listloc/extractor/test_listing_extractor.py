@@ -2,6 +2,7 @@ import unittest
 import os
 import shutil
 from src.listloc.extractor.listing_extractor import ListingExtractor, FileExtractor
+import time
 
 class TestListingExtractor(unittest.TestCase):
 
@@ -24,32 +25,32 @@ class TestListingExtractor(unittest.TestCase):
         f"{__BASE_DIRECTORY_PATH}/dir1/dir3/dir4/{FileExtractor.LISTING_DIRECTORY_NAME}",
         ]
 
-    @classmethod
-    def setUpClass(cls):
-        cls.__LISTINGS_STRINGS = cls.__create_listing_string_dict()
-        os.mkdir(cls.__BASE_DIRECTORY_PATH)
-        cls.__create_subdirs_and_code_files()
-        cls.__create_listing_dir_containing_non_listing_file()
+    def setUp(self):
+        self.__LISTINGS_STRINGS = self.__create_listing_string_dict()
+        try:
+            os.mkdir(self.__BASE_DIRECTORY_PATH)
+        except FileExistsError:
+            pass
+        self.__listing_extractor = ListingExtractor(f"{self.__BASE_DIRECTORY_PATH}")
     
-    @classmethod
-    def __create_listing_string_dict(cls):
+    def __create_listing_string_dict(self):
         listing_dict = {}
-        for file in cls.__FILES:
-            listing_dict[file] = cls.__create_listing_string(f"{os.path.basename(file)}_listing")
+        for file in self.__FILES:
+            listing_dict[file] = self.__create_listing_string(f"{os.path.basename(file)}_listing")
         return listing_dict
 
     @staticmethod
     def __create_listing_string(listing_name):
         return f"BEGIN LISTING {listing_name}\nThis is a code listing\nEND LISTING"
     
-    @classmethod
-    def __create_subdirs_and_code_files(cls):
-        for dir in cls.__SUBDIRS:
-            os.mkdir(f"{cls.__BASE_DIRECTORY_PATH}/{dir}")
-        for file, listing_string in cls.__LISTINGS_STRINGS.items():
-            file_path = f"{cls.__BASE_DIRECTORY_PATH}/{file}"
+    def __create_subdirs_and_code_files(self):
+        for dir in self.__SUBDIRS:
+            os.mkdir(f"{self.__BASE_DIRECTORY_PATH}/{dir}")
+        for file, listing_string in self.__LISTINGS_STRINGS.items():
+            file_path = f"{self.__BASE_DIRECTORY_PATH}/{file}"
             with open(file_path, "wt", encoding="utf-8") as f:
                 f.write(listing_string)
+        self.__create_listing_dir_containing_non_listing_file()
 
     @classmethod
     def __create_listing_dir_containing_non_listing_file(cls):
@@ -58,22 +59,23 @@ class TestListingExtractor(unittest.TestCase):
         with open(f"{unclean_listing_directory}/not_a_listing.txt", "wt") as f:
             f.write("Not a listing")
 
-    @classmethod
-    def tearDownClass(cls):
-        shutil.rmtree(f"{cls.__BASE_DIRECTORY_PATH}")
+    def tearDown(self):
+        shutil.rmtree(f"{self.__BASE_DIRECTORY_PATH}")
 
     def test_extract_all_listings(self):
-        listing_extractor = ListingExtractor(f"{self.__BASE_DIRECTORY_PATH}")
-        listing_extractor.extract_all_listings()
+        self.assertFalse(self.__listing_extractor.extract_all_listings())
+        self.__create_subdirs_and_code_files()
+        self.assertTrue(self.__listing_extractor.extract_all_listings())
         for file_path in self.__LISTING_FILES_THAT_SHOULD_BE_CREATED:
             self.assertTrue(os.path.exists(file_path))
         listing_directory_in_empty_dir = f"{self.__BASE_DIRECTORY_PATH}/dir1/dir3/{FileExtractor.LISTING_DIRECTORY_NAME}"
         self.assertFalse(os.path.isdir(listing_directory_in_empty_dir))
     
     def test_clear_all_listing_extractions(self):
-        listing_extractor = ListingExtractor(f"{self.__BASE_DIRECTORY_PATH}")
-        listing_extractor.extract_all_listings()
-        listing_extractor.clear_all_listing_extractions()
+        self.assertFalse(self.__listing_extractor.clear_all_listing_extractions())
+        self.__create_subdirs_and_code_files()
+        self.__listing_extractor.extract_all_listings()
+        self.assertTrue(self.__listing_extractor.clear_all_listing_extractions())
         for file_path in self.__LISTING_FILES_THAT_SHOULD_BE_CREATED:
             self.assertFalse(os.path.exists(file_path))
         for directory_path in self.__LISTING_DIRECTORIES_THAT_SHOULD_BE_DELETED:

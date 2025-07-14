@@ -10,9 +10,13 @@ class ListingExtractor:
 
     def extract_all_listings(self):
         file_paths = self.__all_file_paths()
+        any_listing_extracted = False
         for path in file_paths:
             file_extractor = FileExtractor(path)
-            file_extractor.extract_listings()
+            listing_extracted = file_extractor.extract_listings()
+            if not any_listing_extracted and listing_extracted:
+                any_listing_extracted = True
+        return any_listing_extracted
     
     def __all_file_paths(self):
         file_paths = []
@@ -23,13 +27,18 @@ class ListingExtractor:
     
     def clear_all_listing_extractions(self):
         directory_paths = self.__all_directory_paths()
+        any_listing_file_or_dir_deleted = False
         for directory in directory_paths:
             if not self.__is_listing_directory(directory):
                 continue
             if self.__only_contains_listing_files(directory):
                 shutil.rmtree(directory)
+                any_listing_file_or_dir_deleted = True
                 continue
-            self.__delete_listing_files_in(directory)
+            listing_file_deleted = self.__delete_listing_files_in(directory)
+            if not any_listing_file_or_dir_deleted and listing_file_deleted:
+                any_listing_file_or_dir_deleted = True
+        return any_listing_file_or_dir_deleted
 
     def __all_directory_paths(self):
         directory_paths = []
@@ -50,9 +59,12 @@ class ListingExtractor:
         return True
     
     def __delete_listing_files_in(self, directory_path):
+        listing_file_deleted = False
         for file in self.__files_in_directory(directory_path):
             if self.__is_listing_file(file):
                 os.remove(os.path.join(directory_path, file))
+                listing_file_deleted = True
+        return listing_file_deleted
     
     def __files_in_directory(self, directory_path):
         return os.listdir(directory_path)

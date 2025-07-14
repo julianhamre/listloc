@@ -24,8 +24,11 @@ def extract(path: Annotated[str, typer.Argument()] = os.getcwd()):
     Example: listloc extract ./my_project
     """
     extractor = ListingExtractor(path)
-    extractor.extract_all_listings()
-    typer.echo(f"Extracted listings from {path}")
+    any_listing_extracted = extractor.extract_all_listings()
+    if any_listing_extracted:
+        typer.echo(f"Extracted listings from {path}")
+    else:
+        typer.echo(f"No listings to extract in {path}")
 
 @app.command()
 def clear(path: Annotated[str, typer.Argument()] = os.getcwd()):
@@ -39,8 +42,11 @@ def clear(path: Annotated[str, typer.Argument()] = os.getcwd()):
     Example: listloc clear ./my_project
     """
     extractor = ListingExtractor(path)
-    extractor.clear_all_listing_extractions()
-    typer.echo(f"Cleared listings from {path}")
+    any_listing_files_or_dirs_deleted = extractor.clear_all_listing_extractions()
+    if any_listing_files_or_dirs_deleted:
+        typer.echo(f"Deleted listings in {path}")
+    else:
+        typer.echo(f"No listing files or directories to delete in {path}")
 
 
 if __name__ == "__main__":
