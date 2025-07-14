@@ -60,7 +60,7 @@ pip install git+https://github.com/julianhamre/listloc.git
 ```
 This will make `listloc` available globally.
 
-It’s recommended to install in a virtual environment to avoid conflicts with system packages.
+However, it’s recommended to install in a virtual environment to avoid conflicts with system packages.
 
 ### Option 2: Install for development
 
