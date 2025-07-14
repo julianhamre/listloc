@@ -12,7 +12,10 @@ See: https://github.com/julianhamre/listloc for more examples and usage.
 """)
 
 @app.command()
-def extract(path: Annotated[str, typer.Argument()] = os.getcwd()):
+def extract(
+    path: Annotated[str, typer.Argument()] = os.getcwd(),
+    prune: Annotated[bool, typer.Option(
+        help="Delete any extracted .listing files that no longer correspond to a declared listing in the source files.")] = False):
     """
     Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
@@ -24,6 +27,8 @@ def extract(path: Annotated[str, typer.Argument()] = os.getcwd()):
     Example: listloc extract ./my_project
     """
     extractor = ListingExtractor(path)
+    if prune:
+        clear(path)
     any_listing_extracted = extractor.extract_all_listings()
     if any_listing_extracted:
         typer.echo(f"Extracted listings from {path}")
