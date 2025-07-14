@@ -14,7 +14,7 @@ See: https://github.com/julianhamre/listloc for more examples and usage.
 @app.command()
 def extract(path: Annotated[str, typer.Argument()] = os.getcwd()):
     """
-    Recursively extract all declared code listings from the source files under the given directory.
+    Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
     Each code listing is the content between `BEGIN LISTING <listing_name>` and `END LISTING`.
     Extracted listings are saved as `.listing` files inside `listings/` directories.
