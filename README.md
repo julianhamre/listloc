@@ -33,7 +33,7 @@ def greet(name):
 listloc extract ./path/to/project
 ```
 
-- Recursively scans for listing declarations.
+- Recursively scans for listing declarations in utf-8 encoded files.
 - Outputs extracted listings to `listings/` directories.
 
 ### Clear Listings
