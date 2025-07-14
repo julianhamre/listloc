@@ -28,7 +28,7 @@ def extract(path: Annotated[str, typer.Argument()] = os.getcwd()):
     if any_listing_extracted:
         typer.echo(f"Extracted listings from {path}")
     else:
-        typer.echo(f"No listings to extract in {path}")
+        typer.echo(f"No listings to extract from {path}")
 
 @app.command()
 def clear(path: Annotated[str, typer.Argument()] = os.getcwd()):
