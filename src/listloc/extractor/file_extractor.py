@@ -20,6 +20,8 @@ class FileExtractor:
         the content in between the statements 'BEGIN LISTING <name>' and 'END LISTING'. 
         The <name> argument decides the listing file names.
         """
+        if not self.__is_utf8_encoding():
+            return
         with open(self.__source_file_path, "rt", encoding="utf-8") as f:
             source_code = f.read()
             pattern = f"{Listing.BEGIN_STATEMENT}.*?{Listing.END_STATEMENT}"
@@ -27,6 +29,16 @@ class FileExtractor:
             listings = self.__construct_listings(listing_strings)
             self.__write_listing_files(listings)
     
+    def __is_utf8_encoding(self, blocksize=512):
+        try:
+            with open(self.__source_file_path, 'rb') as f:
+                chunk = f.read(blocksize)
+            # If it decodes to UTF-8 without error, assume it's a text file
+            chunk.decode('utf-8')
+            return True
+        except (UnicodeDecodeError, OSError):
+            return False
+
     def __construct_listings(self, listing_strings):
         listings = []
         for listing_string in listing_strings:
