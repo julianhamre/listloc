@@ -4,6 +4,12 @@
 
 ---
 
+## Purpose
+
+`listloc` streamlines the process of managing code examples in documentation, especially LaTeX documents. Instead of copying and pasting code blocks or relying on line numbers, you can declare listings directly in your source files and import the extracted listings. Automating the extraction before each build or compile guarantees that your listings always reflect the latest source.
+
+---
+
 ## How to declare Listings
 
 To mark a code listing for extraction in a source file, wrap it between a `BEGIN LISTING <listing_name>` and `END LISTING` comment.
@@ -30,16 +36,17 @@ def greet(name):
 ### Extract Listings
 
 ```bash
-listloc extract ./path/to/project
+listloc extract [--prune] [./path/to/project]
 ```
 
 - Recursively scans for listing declarations in utf-8 encoded files.
 - Outputs extracted listings to `listings/` directories.
+- `--prune`: Deletes any stale `.listing` files that no longer match any listings in the source files.
 
 ### Clear Listings
 
 ```bash
-listloc clear ./path/to/project
+listloc clear [./path/to/project]
 ```
 
 - Recursively deletes all `.listing` files within the given directory.
