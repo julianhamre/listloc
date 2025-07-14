@@ -25,10 +25,10 @@ class ListingExtractor:
         directory_paths = self.__all_directory_paths()
         for directory in directory_paths:
             if not self.__is_listing_directory(directory):
-                return
+                continue
             if self.__only_contains_listing_files(directory):
                 shutil.rmtree(directory)
-                return
+                continue
             self.__delete_listing_files_in(directory)
 
     def __all_directory_paths(self):
@@ -52,7 +52,7 @@ class ListingExtractor:
     def __delete_listing_files_in(self, directory_path):
         for file in self.__files_in_directory(directory_path):
             if self.__is_listing_file(file):
-                os.remove(file)
+                os.remove(os.path.join(directory_path, file))
     
     def __files_in_directory(self, directory_path):
         return os.listdir(directory_path)

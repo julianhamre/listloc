@@ -72,6 +72,7 @@ class TestListingExtractor(unittest.TestCase):
     
     def test_clear_all_listing_extractions(self):
         listing_extractor = ListingExtractor(f"{self.__BASE_DIRECTORY_PATH}")
+        listing_extractor.extract_all_listings()
         listing_extractor.clear_all_listing_extractions()
         for file_path in self.__LISTING_FILES_THAT_SHOULD_BE_CREATED:
             self.assertFalse(os.path.exists(file_path))
