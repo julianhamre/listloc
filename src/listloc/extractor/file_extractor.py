@@ -10,7 +10,7 @@ class FileExtractor:
     def __init__(self, source_file_path):
         self.__source_file_path = source_file_path
         self.__parent_directory_path = os.path.dirname(self.__source_file_path)
-        self.__listing_directory_path = f"{self.__parent_directory_path}/{self.LISTING_DIRECTORY_NAME}"
+        self.__listing_directory_path = os.path.join(self.__parent_directory_path, self.LISTING_DIRECTORY_NAME)
 
     def extract_listings(self):
         """
@@ -64,7 +64,7 @@ class FileExtractor:
             pass
 
     def __write_listing_file(self, listing):
-        write_path = f"{self.__listing_directory_path}/{listing.name}{self.LISTING_FILE_EXTENSION}"
+        write_path = os.path.join(self.__listing_directory_path, listing.name + self.LISTING_FILE_EXTENSION)
         with open(write_path, "wt", encoding="utf-8") as f:
             f.write(listing.content)
 

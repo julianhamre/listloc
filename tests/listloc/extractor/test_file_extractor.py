@@ -41,11 +41,11 @@ farewell('Bob')
 
     @classmethod
     def setUpClass(cls):
-        cls.__listing_extractor = FileExtractor(f"./{cls.__EXAMPLE_CODE_FILE_NAME}")
+        cls.__listing_extractor = FileExtractor(os.path.abspath(cls.__EXAMPLE_CODE_FILE_NAME))
 
     @classmethod
     def tearDownClass(cls):
-        os.remove(cls.__EXAMPLE_CODE_FILE_NAME)
+        os.remove(os.path.abspath(cls.__EXAMPLE_CODE_FILE_NAME))
         cls.__listing_extractor.delete_listing_directory_if_present()
 
     def test_extract_listings(self):
@@ -60,11 +60,11 @@ farewell('Bob')
             f.write(self.__EXAMPLE_CODE)
 
     def __extract_listing_file_contents(self):
-        path_to_dir = f"./{FileExtractor.LISTING_DIRECTORY_NAME}"
+        path_to_dir = os.path.abspath(FileExtractor.LISTING_DIRECTORY_NAME)
         listing_files = os.listdir(path_to_dir)
         listing_strings = {}
         for file in listing_files:
-            path_to_file = f"{path_to_dir}/{file}"
+            path_to_file = os.path.join(path_to_dir, file)
             with open(path_to_file, "rt", encoding="utf-8") as f:
                 listing_strings[file] = f.read()
         return listing_strings
