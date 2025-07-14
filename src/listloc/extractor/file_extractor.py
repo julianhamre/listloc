@@ -29,7 +29,7 @@ class FileExtractor:
             listings = self.__construct_listings(listing_strings)
             self.__write_listing_files(listings)
     
-    def __is_utf8_encoding(self, blocksize=512):
+    def __is_utf8_encoding(self, blocksize=8192):
         try:
             with open(self.__source_file_path, 'rb') as f:
                 chunk = f.read(blocksize)
