@@ -25,6 +25,7 @@ def greet(name):
 
 ---
 
+## CLI usage
 
 ### Extract Listings
 
