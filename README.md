@@ -52,32 +52,44 @@ If no path is provided for these commands, the current directory is used.
 
 ## Installation
 
+### Option 1: Global installation
+
+Install with pip
+```bash
+pip install git+https://github.com/julianhamre/listloc.git
+```
+This will make `listloc` available globally.
+
+It’s recommended to install in a virtual environment to avoid conflicts with system packages.
+
+### Option 2: Install for development
+
+First, clone the repository
+
 ```bash
 git clone https://github.com/julianhamre/listloc.git
-cd path/to/listloc
+cd listloc
 ```
 
-Then install with [Poetry](https://python-poetry.org/)
+Install with [Poetry](https://python-poetry.org/).
 
-### Alternative 1: System-wide installation
-
-```bash
-poetry build
-pip install ./dist/listloc-<VERSION>-py3-none-any.whl
-```
-
-### Alternative 2: For development
-
-Create and activate a virtual environment and run
 ```bash
 poetry install
 ```
+This installs `listloc` in a virtual environment managed by Poetry.
 
-After any successful install you will be able to run
+Thereafter, run
+```bash
+poetry env activate
+```
+This will print the source command that can activate the virtual environment. Activate it manually by running that source command.
 
+Finally, run
 ```bash
 listloc --help
 ```
+to ensure that `listloc` was successfully installed.
+
 ---
 
 
