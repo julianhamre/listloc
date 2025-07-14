@@ -95,4 +95,4 @@ to ensure that `listloc` was successfully installed.
 
 ## License
 
-Licensed under the [MIT License](https://mit-license.org).
+Licensed under the [MIT License](/LICENSE.md).
