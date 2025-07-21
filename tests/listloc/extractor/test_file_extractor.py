@@ -48,7 +48,6 @@ farewell('Bob')
 
     @classmethod
     def tearDownClass(cls):
-        cls.__listing_extractor.delete_listing_directory_if_present()
         cls.__temp_dir.cleanup()
 
     def test_extract_listings(self):

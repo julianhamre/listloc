@@ -1,7 +1,6 @@
 import re
 import os
 from listloc.extractor.listing import Listing
-import shutil
 
 class FileExtractor:
     LISTING_DIRECTORY_NAME = "listings"
@@ -67,7 +66,3 @@ class FileExtractor:
         write_path = os.path.join(self.__listing_directory_path, listing.name + self.LISTING_FILE_EXTENSION)
         with open(write_path, "wt", encoding="utf-8") as f:
             f.write(listing.content)
-
-    def delete_listing_directory_if_present(self):
-        if os.path.isdir(self.__listing_directory_path):
-            shutil.rmtree(self.__listing_directory_path)
