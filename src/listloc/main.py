@@ -49,9 +49,9 @@ def clear(path: Annotated[str, typer.Argument()] = os.getcwd()):
     extractor = ListingExtractor(path)
     any_listing_files_or_dirs_deleted = extractor.clear_all_listing_extractions()
     if any_listing_files_or_dirs_deleted:
-        typer.echo(f"Deleted listings in {path}")
+        typer.echo(f"Deleted .listing files and/or listings/ directories in {path}")
     else:
-        typer.echo(f"No listing files or directories to delete in {path}")
+        typer.echo(f"No .listing files or listings/ directories to delete in {path}")
 
 
 if __name__ == "__main__":

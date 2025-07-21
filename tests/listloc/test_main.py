@@ -23,7 +23,7 @@ class TestCLI(unittest.TestCase):
 
     def test_extract_no_listings_with_prune_option(self):
         result = runner.invoke(app, ["extract", "--prune", self.__BASE_DIRECTORY_PATH])
-        self.assertEqual(f"No listing files or directories to delete in {self.__BASE_DIRECTORY_PATH}\nNo listings to extract from {self.__BASE_DIRECTORY_PATH}\n", result.output)
+        self.assertEqual(f"No .listing files or listings/ directories to delete in {self.__BASE_DIRECTORY_PATH}\nNo listings to extract from {self.__BASE_DIRECTORY_PATH}\n", result.output)
 
     def test_extract_with_listing(self):
         self.__write_source_file_with_listing()
@@ -37,20 +37,20 @@ class TestCLI(unittest.TestCase):
         result = runner.invoke(app, ["extract", "--prune", self.__BASE_DIRECTORY_PATH])
         self.assertTrue(self.__listing_file_present())
         self.assertFalse(os.path.exists(self.__STALE_LISTING_FILE_PATH))
-        expected_output = f"Deleted listings in {self.__BASE_DIRECTORY_PATH}\nExtracted listings from {self.__BASE_DIRECTORY_PATH}\n"
+        expected_output = f"Deleted .listing files and/or listings/ directories in {self.__BASE_DIRECTORY_PATH}\nExtracted listings from {self.__BASE_DIRECTORY_PATH}\n"
         self.assertEqual(expected_output, result.output)
 
     def test_clear_no_listings(self):
         result = runner.invoke(app, ["clear", self.__BASE_DIRECTORY_PATH])
         self.assertFalse(self.__listing_file_present())
-        self.assertEqual(f"No listing files or directories to delete in {self.__BASE_DIRECTORY_PATH}\n", result.output)
+        self.assertEqual(f"No .listing files or listings/ directories to delete in {self.__BASE_DIRECTORY_PATH}\n", result.output)
 
     def test_clear_listings(self):
         self.__write_source_file_with_listing()
         runner.invoke(app, ["extract", self.__BASE_DIRECTORY_PATH])
         result = runner.invoke(app, ["clear", self.__BASE_DIRECTORY_PATH])
         self.assertFalse(self.__listing_file_present())
-        self.assertEqual(f"Deleted listings in {self.__BASE_DIRECTORY_PATH}\n", result.output)
+        self.assertEqual(f"Deleted .listing files and/or listings/ directories in {self.__BASE_DIRECTORY_PATH}\n", result.output)
 
     def __listing_file_present(self):
         for root, dirs, files in os.walk(self.__BASE_DIRECTORY_PATH):
