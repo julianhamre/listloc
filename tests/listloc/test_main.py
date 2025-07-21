@@ -3,7 +3,7 @@ import tempfile
 import os
 import shutil
 from typer.testing import CliRunner
-from listloc.main import app
+from listloc.main import app, get_version_from_toml
 from listloc.extractor.file_extractor import FileExtractor
 
 runner = CliRunner()
@@ -16,6 +16,16 @@ class TestCLI(unittest.TestCase):
 
     def tearDown(self):
         self.__temp_dir.cleanup()
+
+    def test_version_option(self):
+        expected_version = get_version_from_toml()
+        self.__is_semver_string(expected_version)
+        result = runner.invoke(app, ["--version"])
+        self.assertEqual(expected_version, result.output.strip())
+
+    def __is_semver_string(self, version: str):
+        semver_pattern = "^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+        self.assertRegex(version.strip(), semver_pattern)
 
     def test_extract_no_listings(self):
         result = runner.invoke(app, ["extract", self.__BASE_DIRECTORY_PATH])

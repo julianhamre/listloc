@@ -1,3 +1,4 @@
+import tomllib
 import typer
 from typing_extensions import Annotated
 from rich.markdown import Markdown
@@ -5,11 +6,37 @@ import os
 from listloc.extractor.listing_extractor import ListingExtractor
 
 
-app = typer.Typer(rich_markup_mode="rich", help="""
-Extract and manage code listings from source files.
+app = typer.Typer(
+    rich_markup_mode="rich",
+    help="""Extract and manage code listings declared in text-based source files.""",
+)
 
-See: https://github.com/julianhamre/listloc for more examples and usage.
-""")
+
+def get_version_from_toml():
+    try:
+        with open("pyproject.toml", "rb") as f:
+            data = tomllib.load(f)
+            return data["project"]["version"]
+    except Exception:
+        return "unknown"
+
+def version_callback(value: bool):
+    if value:
+        typer.echo(get_version_from_toml())
+        raise typer.Exit()
+
+@app.callback()
+def main(
+    version: Annotated[
+        bool,
+        typer.Option(
+            "--version",
+            callback=version_callback,
+            is_eager=True,
+            help="Show the version and exit."
+        )] = False
+        ):
+    pass
 
 @app.command()
 def extract(
