@@ -1,13 +1,14 @@
 import unittest
 import os
+import tempfile
 from src.listloc.extractor.file_extractor import FileExtractor
 
 class TestFileExtractor(unittest.TestCase):
-    __EXAMPLE_CODE_FILE_NAME = "temp_code.py"
-    __EXPECTED_LISTING_STRINGS = {f"import{FileExtractor.LISTING_FILE_EXTENSION}": "import os",
-                                  f"greet{FileExtractor.LISTING_FILE_EXTENSION}": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')",
-                                  f"farewell{FileExtractor.LISTING_FILE_EXTENSION}": "def farewell(name):\n    print(f'Goodbye, {name}.')\n\nfarewell('Bob')"
-}
+    __EXPECTED_LISTING_STRINGS = {
+        f"import{FileExtractor.LISTING_FILE_EXTENSION}": "import os",
+        f"greet{FileExtractor.LISTING_FILE_EXTENSION}": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')",
+        f"farewell{FileExtractor.LISTING_FILE_EXTENSION}": "def farewell(name):\n    print(f'Goodbye, {name}.')\n\nfarewell('Bob')"
+    }
     __EXAMPLE_CODE = """# Some setup code
 
 # BEGIN LISTING import
@@ -41,12 +42,14 @@ farewell('Bob')
 
     @classmethod
     def setUpClass(cls):
-        cls.__listing_extractor = FileExtractor(os.path.abspath(cls.__EXAMPLE_CODE_FILE_NAME))
+        cls.__temp_dir = tempfile.TemporaryDirectory()
+        cls.__example_code_path = os.path.join(cls.__temp_dir.name, "temp_code.py")
+        cls.__listing_extractor = FileExtractor(cls.__example_code_path)
 
     @classmethod
     def tearDownClass(cls):
-        os.remove(os.path.abspath(cls.__EXAMPLE_CODE_FILE_NAME))
         cls.__listing_extractor.delete_listing_directory_if_present()
+        cls.__temp_dir.cleanup()
 
     def test_extract_listings(self):
         self.assertFalse(self.__listing_extractor.extract_listings())
@@ -56,11 +59,11 @@ farewell('Bob')
         self.assertEqual(self.__EXPECTED_LISTING_STRINGS, actual_listing_strings)
 
     def __create_example_code_file(self):
-        with open(self.__EXAMPLE_CODE_FILE_NAME, "wt", encoding="utf-8") as f:
+        with open(self.__example_code_path, "wt", encoding="utf-8") as f:
             f.write(self.__EXAMPLE_CODE)
 
     def __extract_listing_file_contents(self):
-        path_to_dir = os.path.abspath(FileExtractor.LISTING_DIRECTORY_NAME)
+        path_to_dir = os.path.join(self.__temp_dir.name, FileExtractor.LISTING_DIRECTORY_NAME)
         listing_files = os.listdir(path_to_dir)
         listing_strings = {}
         for file in listing_files:
