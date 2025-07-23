@@ -67,7 +67,7 @@ print('hello')
         path = os.path.join(self.__BASE_DIRECTORY_PATH, "invalid_source_file.py")
         self.__create_code_file(path, self.__INVALID_LISTING_DECLARATION)
         extractor = FileExtractor(path)
-        expected_message = f"In file '{path}': The begin statement 'BEGIN LISTING name1 something else' should be on the format 'BEGIN LISTING <name>'"
+        expected_message = f"In file '{path}': The begin statement 'BEGIN LISTING name1 something else' should be in the format 'BEGIN LISTING <name>'"
         self.assertRaisesRegex(Exception, expected_message, extractor.extract_listings) 
 
     def __create_code_file(self, path, code_file_content):

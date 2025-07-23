@@ -12,9 +12,9 @@ class Listing:
 
     def __validate_input_string(self, listing_string):
         if not isinstance(listing_string, str):
-            raise TypeError("The listing_string must be a string")
+            raise TypeError("The listing string must be a string")
         if listing_string == "":
-            raise ListingError("The listing_string cannot be empty")
+            raise ListingError("The listing string cannot be empty")
         
     def __extract_content(self):
         statement_lines_removed = self.__listing_lines[1:-1]
@@ -45,7 +45,7 @@ class Listing:
             raise ListingError(f"The end statement line '{end_line}' should end with '{self.END_STATEMENT}'")
 
     def __raise_begin_statement_format_error(self):
-        raise ListingError(f"The begin statement '{self.__begin_statement_line}' should be on the format '{self.BEGIN_STATEMENT} <name>'")
+        raise ListingError(f"The begin statement '{self.__begin_statement_line}' should be in the format '{self.BEGIN_STATEMENT} <name>' (e.g., 'BEGIN LISTING my_snippet')")
 
     def __validate_content(self):
         if self.__content == "":
