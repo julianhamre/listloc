@@ -40,26 +40,39 @@ farewell('Bob')
 # END LISTING
 """
 
+    __INVALID_LISTING_DECLARATION = """# BEGIN LISTING name1 something else
+print('hello')
+# END LISTING
+"""
+
     @classmethod
     def setUpClass(cls):
         cls.__temp_dir = tempfile.TemporaryDirectory()
-        cls.__example_code_path = os.path.join(cls.__temp_dir.name, "temp_code.py")
-        cls.__listing_extractor = FileExtractor(cls.__example_code_path)
+        cls.__BASE_DIRECTORY_PATH = cls.__temp_dir.name
 
     @classmethod
     def tearDownClass(cls):
         cls.__temp_dir.cleanup()
 
     def test_extract_listings(self):
-        self.assertFalse(self.__listing_extractor.extract_listings())
-        self.__create_example_code_file()
-        self.assertTrue(self.__listing_extractor.extract_listings())
+        path = os.path.join(self.__BASE_DIRECTORY_PATH, "temp_code.py")
+        extractor = FileExtractor(path)
+        self.assertFalse(extractor.extract_listings())
+        self.__create_code_file(path, self.__EXAMPLE_CODE)
+        self.assertTrue(extractor.extract_listings())
         actual_listing_strings = self.__extract_listing_file_contents()
         self.assertEqual(self.__EXPECTED_LISTING_STRINGS, actual_listing_strings)
 
-    def __create_example_code_file(self):
-        with open(self.__example_code_path, "wt", encoding="utf-8") as f:
-            f.write(self.__EXAMPLE_CODE)
+    def test_raise_when_invalid_declaration(self):
+        path = os.path.join(self.__BASE_DIRECTORY_PATH, "invalid_source_file.py")
+        self.__create_code_file(path, self.__INVALID_LISTING_DECLARATION)
+        extractor = FileExtractor(path)
+        expected_message = f"In file '{path}': The begin statement 'BEGIN LISTING name1 something else' should be on the format 'BEGIN LISTING <name>'"
+        self.assertRaisesRegex(Exception, expected_message, extractor.extract_listings) 
+
+    def __create_code_file(self, path, code_file_content):
+        with open(path, "wt", encoding="utf-8") as f:
+            f.write(code_file_content)
 
     def __extract_listing_file_contents(self):
         path_to_dir = os.path.join(self.__temp_dir.name, FileExtractor.LISTING_DIRECTORY_NAME)

@@ -47,7 +47,10 @@ class FileExtractor:
     def __construct_listings(self, listing_strings):
         listings = []
         for listing_string in listing_strings:
-            listings.append(Listing(listing_string))
+            try:
+                listings.append(Listing(listing_string))
+            except Exception as e:
+                raise type(e)(f"In file '{self.__source_file_path}': {e}") from e
         return listings
    
     def __write_listing_files(self, listings):
