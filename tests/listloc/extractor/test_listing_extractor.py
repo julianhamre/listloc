@@ -49,6 +49,14 @@ class TestListingExtractor(unittest.TestCase):
     def tearDown(self):
         self.temp_dir.cleanup()
 
+    def test_invalid_path(self):
+        self.__create_subdirs_and_code_files()
+        invalid_paths = [os.path.join(self.__BASE_DIRECTORY_PATH, "file1"),
+                         os.path.join(self.__BASE_DIRECTORY_PATH, "not_a_file_or_dir"),
+                         os.path.join(self.__BASE_DIRECTORY_PATH, "dir1", "dir2", "file1")]
+        for path in invalid_paths:
+            self.assertRaises(NotADirectoryError, ListingExtractor, path)
+
     def test_extract_all_listings(self):
         self.assertFalse(self.__listing_extractor.extract_all_listings())
         self.__create_subdirs_and_code_files()

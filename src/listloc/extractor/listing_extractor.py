@@ -6,7 +6,12 @@ from listloc.extractor.file_extractor import FileExtractor
 class ListingExtractor:
 
     def __init__(self, base_directory_path):
+        self.__validate_directory_path(base_directory_path)
         self.__base_directory_path = base_directory_path
+
+    def __validate_directory_path(self, path):
+        if not os.path.isdir(path):
+            raise NotADirectoryError(f"Expected a directory path, but got: '{path}'")
 
     def extract_all_listings(self):
         file_paths = self.__all_file_paths()
