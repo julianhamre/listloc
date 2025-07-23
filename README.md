@@ -6,7 +6,7 @@
 
 ## Purpose
 
-`listloc` streamlines the process of managing code examples in documentation, especially LaTeX documents. Instead of copying and pasting code blocks or relying on line numbers, you can declare listings directly in your source files and import the extracted listings. Automating the extraction before each build or compile guarantees that your listings always reflect the latest source.
+`listloc` streamlines the process of managing code examples in documentation, especially LaTeX documents. Instead of copying and pasting code blocks or relying on line numbers when importing, you can declare listings directly in your source files and import the extracted `.listing` files. Automating the extraction process before each build or compile guarantees that your listings always reflect the latest source.
 
 ---
 
@@ -39,7 +39,7 @@ def greet(name):
 listloc extract [--prune] [./path/to/project]
 ```
 
-- Recursively scans for listing declarations in utf-8 encoded files.
+- Recursively scans for listing declarations in UTF-8 encoded files within the given directory.
 - Outputs extracted listings to `listings/` directories.
 - `--prune`: Deletes any stale `.listing` files that no longer match any listings in the source files.
 
@@ -50,10 +50,10 @@ listloc clear [./path/to/project]
 ```
 
 - Recursively deletes all `.listing` files within the given directory.
-- Removes any `listings/` directories only containing `.listing` files.
+- Removes any `listings/` directories that are either empty or only contain `.listing` files.
 
 
-If no path is provided for these commands, the current directory is used.
+If no directory path is provided for these commands, the current directory is used.
 
 ---
 
