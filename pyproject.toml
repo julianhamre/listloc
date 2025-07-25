@@ -1,6 +1,6 @@
 [project]
 name = "listloc"
-version = "0.3.1"
+version = "0.3.2"
 description = ""
 authors = [
     {name = "Julian Hamre",email = "julian.hamre5@gmail.com"}
