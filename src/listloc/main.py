@@ -4,6 +4,7 @@ from typing_extensions import Annotated
 from rich.markdown import Markdown
 import os
 from listloc.extractor.listing_extractor import ListingExtractor
+from listloc.extractor.action_logger import ActionLogger
 
 
 app = typer.Typer(
@@ -11,6 +12,7 @@ app = typer.Typer(
     help="""Extract and manage code listings declared in text-based source files.""",
 )
 
+VERBOSE_HELP_MESSAGE = "Print each file extracted from and every file or directory created or deleted."
 
 def get_version_from_toml():
     try:
@@ -41,8 +43,10 @@ def main(
 @app.command()
 def extract(
     path: Annotated[str, typer.Argument()] = os.getcwd(),
+    verbose: Annotated[bool, typer.Option(help=VERBOSE_HELP_MESSAGE)] = False,
     prune: Annotated[bool, typer.Option(
-        help="Delete any extracted .listing files that no longer correspond to a declared listing in the source files.")] = False):
+        help="Delete any extracted .listing files that no longer correspond to a declared listing in the source files.")] = False,
+    ):
     """
     Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
@@ -53,17 +57,17 @@ def extract(
 
     Example: listloc extract ./my_project
     """
-    extractor = ListingExtractor(path)
+    logger = ActionLogger(path, verbose=verbose)
+    extractor = ListingExtractor(path, logger)
     if prune:
-        clear(path)
-    any_listing_extracted = extractor.extract_all_listings()
-    if any_listing_extracted:
-        typer.echo(f"Extracted listings from {path}")
-    else:
-        typer.echo(f"No listings to extract from {path}")
+        extractor.clear_all_listing_extractions()
+    extractor.extract_all_listings()
+    logger.summarize_or_note_no_extractions()
+
 
 @app.command()
-def clear(path: Annotated[str, typer.Argument()] = os.getcwd()):
+def clear(path: Annotated[str, typer.Argument()] = os.getcwd(),
+          verbose: Annotated[bool, typer.Option(help=VERBOSE_HELP_MESSAGE)] = False):
     """
     Recursively delete all extracted `.listing` files under the given directory.
 
@@ -73,13 +77,10 @@ def clear(path: Annotated[str, typer.Argument()] = os.getcwd()):
 
     Example: listloc clear ./my_project
     """
-    extractor = ListingExtractor(path)
-    any_listing_files_or_dirs_deleted = extractor.clear_all_listing_extractions()
-    if any_listing_files_or_dirs_deleted:
-        typer.echo(f"Deleted .listing files and/or listings/ directories in {path}")
-    else:
-        typer.echo(f"No .listing files or listings/ directories to delete in {path}")
-
+    logger = ActionLogger(path, verbose=verbose)
+    extractor = ListingExtractor(path, logger)
+    extractor.clear_all_listing_extractions()
+    logger.summarize_or_note_no_clearings()
 
 if __name__ == "__main__":
     app()

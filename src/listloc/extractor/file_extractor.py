@@ -1,15 +1,16 @@
 import re
 import os
+from listloc.extractor.listing_constants import ListingConstants
 from listloc.extractor.listing import Listing
+from listloc.extractor.action_logger import ActionLogger
 
 class FileExtractor:
-    LISTING_DIRECTORY_NAME = "listings"
-    LISTING_FILE_EXTENSION = ".listing"
 
-    def __init__(self, source_file_path):
+    def __init__(self, source_file_path, action_logger: ActionLogger):
         self.__source_file_path = source_file_path
         self.__parent_directory_path = os.path.dirname(self.__source_file_path)
-        self.__listing_directory_path = os.path.join(self.__parent_directory_path, self.LISTING_DIRECTORY_NAME)
+        self.__listing_directory_path = os.path.join(self.__parent_directory_path, ListingConstants.LISTING_DIRECTORY_NAME)
+        self.__logger = action_logger
 
     def extract_listings(self):
         """
@@ -23,16 +24,14 @@ class FileExtractor:
             True if any listing was extracted, False if not
         """
         if not self.__is_utf8_encoding():
-            return False
+            return
         with open(self.__source_file_path, "rt", encoding="utf-8") as f:
             source_code = f.read()
             pattern = f"{Listing.BEGIN_STATEMENT}.*?{Listing.END_STATEMENT}"
             listing_strings = re.findall(pattern, source_code, flags=re.DOTALL)
-            if not listing_strings:
-                return False
             listings = self.__construct_listings(listing_strings)
+            self.__logger.log_extracted(self.__source_file_path, len(listings))
             self.__write_listing_files(listings)
-            return True
 
     def __is_utf8_encoding(self, blocksize=8192):
         try:
@@ -62,10 +61,12 @@ class FileExtractor:
     def __create_directory_if_absent(self):
         try:
             os.mkdir(self.__listing_directory_path)
+            self.__logger.log_created_directory(self.__listing_directory_path)
         except FileExistsError:
             pass
 
     def __write_listing_file(self, listing):
-        write_path = os.path.join(self.__listing_directory_path, listing.name + self.LISTING_FILE_EXTENSION)
+        write_path = os.path.join(self.__listing_directory_path, listing.name + ListingConstants.LISTING_FILE_EXTENSION)
         with open(write_path, "wt", encoding="utf-8") as f:
             f.write(listing.content)
+            self.__logger.log_written_file(write_path)

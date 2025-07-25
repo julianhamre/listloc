@@ -2,12 +2,14 @@ import unittest
 import os
 import tempfile
 from src.listloc.extractor.file_extractor import FileExtractor
+from src.listloc.extractor.listing_constants import ListingConstants
+from src.listloc.extractor.action_logger import ActionLogger
 
 class TestFileExtractor(unittest.TestCase):
     __EXPECTED_LISTING_STRINGS = {
-        f"import{FileExtractor.LISTING_FILE_EXTENSION}": "import os",
-        f"greet{FileExtractor.LISTING_FILE_EXTENSION}": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')",
-        f"farewell{FileExtractor.LISTING_FILE_EXTENSION}": "def farewell(name):\n    print(f'Goodbye, {name}.')\n\nfarewell('Bob')"
+        f"import{ListingConstants.LISTING_FILE_EXTENSION}": "import os",
+        f"greet{ListingConstants.LISTING_FILE_EXTENSION}": "def greet(name):\n    print(f'Hello, {name}!')\n\ngreet('Alice')",
+        f"farewell{ListingConstants.LISTING_FILE_EXTENSION}": "def farewell(name):\n    print(f'Goodbye, {name}.')\n\nfarewell('Bob')"
     }
     __EXAMPLE_CODE = """# Some setup code
 
@@ -45,28 +47,26 @@ print('hello')
 # END LISTING
 """
 
-    @classmethod
-    def setUpClass(cls):
-        cls.__temp_dir = tempfile.TemporaryDirectory()
-        cls.__BASE_DIRECTORY_PATH = cls.__temp_dir.name
+    def setUp(self):
+        self.__temp_dir = tempfile.TemporaryDirectory()
+        self.__BASE_DIRECTORY_PATH = self.__temp_dir.name
+        self.__logger = ActionLogger(self.__BASE_DIRECTORY_PATH)
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.__temp_dir.cleanup()
+    def tearDown(self):
+        self.__temp_dir.cleanup()
 
     def test_extract_listings(self):
         path = os.path.join(self.__BASE_DIRECTORY_PATH, "temp_code.py")
-        extractor = FileExtractor(path)
-        self.assertFalse(extractor.extract_listings())
         self.__create_code_file(path, self.__EXAMPLE_CODE)
-        self.assertTrue(extractor.extract_listings())
+        extractor = FileExtractor(path, self.__logger)
+        extractor.extract_listings()
         actual_listing_strings = self.__extract_listing_file_contents()
         self.assertEqual(self.__EXPECTED_LISTING_STRINGS, actual_listing_strings)
 
     def test_raise_when_invalid_declaration(self):
         path = os.path.join(self.__BASE_DIRECTORY_PATH, "invalid_source_file.py")
         self.__create_code_file(path, self.__INVALID_LISTING_DECLARATION)
-        extractor = FileExtractor(path)
+        extractor = FileExtractor(path, self.__logger)
         expected_message = f"In file '{path}': The begin statement 'BEGIN LISTING name1 something else' should be in the format 'BEGIN LISTING <name>'"
         self.assertRaisesRegex(Exception, expected_message, extractor.extract_listings) 
 
@@ -75,7 +75,7 @@ print('hello')
             f.write(code_file_content)
 
     def __extract_listing_file_contents(self):
-        path_to_dir = os.path.join(self.__temp_dir.name, FileExtractor.LISTING_DIRECTORY_NAME)
+        path_to_dir = os.path.join(self.__temp_dir.name, ListingConstants.LISTING_DIRECTORY_NAME)
         listing_files = os.listdir(path_to_dir)
         listing_strings = {}
         for file in listing_files:
