@@ -24,10 +24,10 @@ class Listing:
     def __surrounding_empty_lines_removed(self, lines):
         lines_copy = lines[:]
         # Remove leading empty lines
-        while lines_copy and lines_copy[0] == "":
+        while lines_copy and lines_copy[0].strip() == "":
             lines_copy = lines_copy[1:]
         # Remove trailing empty lines
-        while lines_copy and lines_copy[-1] == "":
+        while lines_copy and lines_copy[-1].strip() == "":
             lines_copy = lines_copy[:-1]
         return lines_copy
     
