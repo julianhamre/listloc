@@ -6,7 +6,7 @@ class Listing:
         self.__validate_input_string(listing_string)
         self.__listing_lines = listing_string.splitlines()
         self.__begin_statement_line = self.__listing_lines[0].strip()
-        self.__begin_statement_keywords = self.__begin_statement_line.split(" ")
+        self.__begin_statement_keywords = self.__begin_statement_line.split()
         self.__content = self.__extract_content()
         self.__validate_listing()
 
