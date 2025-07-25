@@ -22,7 +22,7 @@ def greet(name):
 # END LISTING
 ```
 
-If extracted, a file called `greet.listing` will be created and saved in a `listings/` directory in the same location as the source file. Every `.listing` file will contain the content in between the listing declaration wrapper:
+When extracted, a file named `greet.listing` is created in a `listings/` directory next to the source file. Every `.listing` file will contain the content in between the listing declaration wrapper:
 
 ```text
 def greet(name):
@@ -33,27 +33,37 @@ def greet(name):
 
 ## CLI usage
 
+The `--help` flag can also be used to view documentation.
+
 ### Extract Listings
 
 ```bash
-listloc extract [--prune] [./path/to/project]
+listloc extract [--prune] [--verbose] [./path/to/project]
 ```
 
-- Recursively scans for listing declarations in UTF-8 encoded files within the given directory.
-- Outputs extracted listings to `listings/` directories.
+- Recursively scans UTF-8 source files in the given directory for listing declarations.
+- Each listing is extracted to a `.listing` file inside a `listings/` directory located next to its source file.
 - `--prune`: Deletes any stale `.listing` files that no longer match any listings in the source files.
+- `--verbose`: Prints each file extracted from and every file or directory created or deleted.
 
 ### Clear Listings
 
 ```bash
-listloc clear [./path/to/project]
+listloc clear [--verbose] [./path/to/project]
 ```
 
 - Recursively deletes all `.listing` files within the given directory.
 - Removes any `listings/` directories that are either empty or only contain `.listing` files.
+- `--verbose`: Prints every deleted file and directory.
 
 
 If no directory path is provided for these commands, the current directory is used.
+
+### Examples
+
+- `listloc extract`
+- `listloc clear --help`
+- `listloc extract --prune --verbose my_project`
 
 ---
 
