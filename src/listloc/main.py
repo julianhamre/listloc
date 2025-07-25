@@ -12,8 +12,6 @@ app = typer.Typer(
     help="""Extract and manage code listings declared in text-based source files.""",
 )
 
-VERBOSE_HELP_MESSAGE = "Print each file extracted from and every file or directory created or deleted."
-
 def get_version_from_toml():
     try:
         with open("pyproject.toml", "rb") as f:
@@ -43,7 +41,8 @@ def main(
 @app.command()
 def extract(
     path: Annotated[str, typer.Argument()] = os.getcwd(),
-    verbose: Annotated[bool, typer.Option(help=VERBOSE_HELP_MESSAGE)] = False,
+    verbose: Annotated[bool, typer.Option(
+        help="Print each file extracted from and every file or directory created or deleted.")] = False,
     prune: Annotated[bool, typer.Option(
         help="Delete any extracted .listing files that no longer correspond to a declared listing in the source files.")] = False,
     ):
@@ -67,7 +66,8 @@ def extract(
 
 @app.command()
 def clear(path: Annotated[str, typer.Argument()] = os.getcwd(),
-          verbose: Annotated[bool, typer.Option(help=VERBOSE_HELP_MESSAGE)] = False):
+          verbose: Annotated[bool, typer.Option(
+              help="Print every deleted file and directory")] = False):
     """
     Recursively delete all extracted `.listing` files under the given directory.
 
