@@ -49,7 +49,7 @@ class ActionLogger:
             return
         self.__print_if_verbose(Rule(characters="--", align="left"))
         number_of_deleted_files = self.__deleted.number_of_listing_files()
-        self.__print_concluding_message(number_of_deleted_files, f"Deleted a total of {number_of_deleted_files} listing extraction{self.__plural_suffix(number_of_deleted_files)}")
+        self.__print_concluding_message(number_of_deleted_files, f"Deleted a total of {number_of_deleted_files} extracted listing{self.__plural_suffix(number_of_deleted_files)}")
         number_of_written_files = self.__created.number_of_listing_files()
         self.__print_concluding_message(number_of_written_files, f"Extracted a total of {number_of_written_files} listing{self.__plural_suffix(number_of_written_files)} from {self.__extracted_files} source file{self.__plural_suffix(self.__extracted_files)}")
 

@@ -46,7 +46,7 @@ class TestCLI(unittest.TestCase):
         result = runner.invoke(app, ["extract", "--prune", self.__BASE_DIRECTORY_PATH])
         self.assertTrue(self.__listing_file_present())
         self.assertFalse(os.path.exists(self.__STALE_LISTING_FILE_PATH))
-        expected_output = "Deleted a total of 1 listing extraction\nExtracted a total of 1 listing from 1 source file\n"
+        expected_output = "Deleted a total of 1 extracted listing\nExtracted a total of 1 listing from 1 source file\n"
         self.assertEqual(expected_output, result.output)
 
     def test_extract_with_prune_and_verbose(self):
@@ -60,7 +60,7 @@ Extracted 1 listing from '{os.path.join(self.__BASE_DIRECTORY_PATH, "example.txt
 Created '{os.path.join(self.__BASE_DIRECTORY_PATH, "listings")}'
 Wrote '{os.path.join(self.__BASE_DIRECTORY_PATH, "listings", "foo.listing")}'"""
         self.assertIn(expected_detailed_log.replace("\n", ""), result.output.replace("\n", ""))
-        expected_summary = "Deleted a total of 1 listing extraction\nExtracted a total of 1 listing from 1 source file\n"
+        expected_summary = "Deleted a total of 1 extracted listing\nExtracted a total of 1 listing from 1 source file\n"
         self.assertIn(expected_summary, result.output)
 
     def test_clear_no_listings(self):
@@ -74,7 +74,7 @@ Wrote '{os.path.join(self.__BASE_DIRECTORY_PATH, "listings", "foo.listing")}'"""
         runner.invoke(app, ["extract", self.__BASE_DIRECTORY_PATH])
         result = runner.invoke(app, ["clear", self.__BASE_DIRECTORY_PATH])
         self.assertFalse(self.__listing_file_present())
-        self.assertEqual(f"Deleted a total of 2 listing extractions\n", result.output)
+        self.assertEqual(f"Deleted a total of 2 extracted listings\n", result.output)
 
     def test_clear_with_verbose_option(self):
         self.__write_source_file_with_listing()
