@@ -1,7 +1,6 @@
-import tomllib
 import typer
 from typing_extensions import Annotated
-from rich.markdown import Markdown
+from importlib.metadata import version, PackageNotFoundError
 import os
 from listloc.extractor.listing_extractor import ListingExtractor
 from listloc.extractor.action_logger import ActionLogger
@@ -12,17 +11,15 @@ app = typer.Typer(
     help="""Extract and manage code listings declared in text-based source files.""",
 )
 
-def get_version_from_toml():
+def get_version_from_metadata():
     try:
-        with open("pyproject.toml", "rb") as f:
-            data = tomllib.load(f)
-            return data["project"]["version"]
-    except Exception:
+        return version("listloc")
+    except PackageNotFoundError:
         return "unknown"
 
 def version_callback(value: bool):
     if value:
-        typer.echo(get_version_from_toml())
+        typer.echo(get_version_from_metadata())
         raise typer.Exit()
 
 @app.callback()

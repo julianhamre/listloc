@@ -2,7 +2,7 @@ import unittest
 import tempfile
 import os
 from typer.testing import CliRunner
-from listloc.main import app, get_version_from_toml
+from listloc.main import app, get_version_from_metadata
 from listloc.extractor.listing_constants import ListingConstants
 
 runner = CliRunner()
@@ -17,7 +17,7 @@ class TestCLI(unittest.TestCase):
         self.__temp_dir.cleanup()
 
     def test_version_option(self):
-        expected_version = get_version_from_toml()
+        expected_version = get_version_from_metadata()
         self.__is_semver_string(expected_version)
         result = runner.invoke(app, ["--version"])
         self.assertEqual(expected_version, result.output.strip())
