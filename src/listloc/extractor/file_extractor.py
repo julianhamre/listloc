@@ -19,9 +19,6 @@ class FileExtractor:
         located in the directory of the code file that is extracted from. A valid listing is 
         the content in between the statements 'BEGIN LISTING <name>' and 'END LISTING'. 
         The <name> argument decides the listing file names.
-
-        Returns:
-            True if any listing was extracted, False if not
         """
         if not self.__is_utf8_encoding():
             return
