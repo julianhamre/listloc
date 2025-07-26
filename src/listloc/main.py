@@ -35,6 +35,10 @@ def main(
         ):
     pass
 
+def create_extractor(path: str, verbose: bool):
+    logger = ActionLogger(path, verbose=verbose)
+    return ListingExtractor(path, logger), logger
+
 @app.command()
 def extract(
     path: Annotated[str, typer.Argument()] = os.getcwd(),
@@ -53,8 +57,7 @@ def extract(
 
     Example: listloc extract ./my_project
     """
-    logger = ActionLogger(path, verbose=verbose)
-    extractor = ListingExtractor(path, logger)
+    extractor, logger = create_extractor(path, verbose)
     if prune:
         extractor.clear_all_listing_extractions()
     extractor.extract_all_listings()
@@ -74,8 +77,7 @@ def clear(path: Annotated[str, typer.Argument()] = os.getcwd(),
 
     Example: listloc clear ./my_project
     """
-    logger = ActionLogger(path, verbose=verbose)
-    extractor = ListingExtractor(path, logger)
+    extractor, logger = create_extractor(path, verbose)
     extractor.clear_all_listing_extractions()
     logger.summarize_or_note_no_clearings()
 
