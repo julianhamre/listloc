@@ -3,7 +3,7 @@ name = "listloc"
 version = "0.3.2"
 description = ""
 authors = [
-    {name = "Julian Hamre",email = "julian.hamre5@gmail.com"}
+    {name = "Julian Hamre"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
