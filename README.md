@@ -22,13 +22,32 @@ def greet(name):
 # END LISTING
 ```
 
-When extracted, a file named `greet.listing` is created in a `listings/` directory next to the source file. Every `.listing` file will contain the content in between the listing declaration wrapper:
+When extracted, a file named `greet.listing` is created in a `listings/` directory next to the source file. Every `.listing` file will contain the lines in between the listing declaration wrapper:
 
 ```text
 def greet(name):
     print(f"Hello, {name}!")
 ```
 
+Leading and trailing blank lines are removed from the extracted content.
+For example, even this declaration:
+
+```python
+# BEGIN LISTING greet
+
+
+def greet(name):
+    print(f"Hello, {name}!")
+
+# END LISTING
+```
+
+will result in the same extract:
+
+```text
+def greet(name):
+    print(f"Hello, {name}!")
+```
 ---
 
 ## CLI usage

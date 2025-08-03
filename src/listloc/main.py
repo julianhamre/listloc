@@ -50,8 +50,7 @@ def extract(
     """
     Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
-    Each code listing is the content between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan].
-    Extracted listings are saved as [bold].listing[/bold] files inside [bold]listings/[/bold] directories.
+    Each code listing includes the lines between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan], with any leading or trailing blank lines automatically removed. Extracted listings are saved as [bold].listing[/bold] files inside [bold]listings/[/bold] directories.
 
     If no directory path is provided, the current working directory is used.
 
@@ -72,7 +71,7 @@ def clear(path: Annotated[str, typer.Argument()] = os.getcwd(),
     """
     Recursively delete all extracted [bold].listing[/bold] files under the given directory.
 
-    Any [bold]listings/[/bold] directory left empty after the deletions will also be removed.
+    Every [bold]listings/[/bold] directory left empty after the deletions will also be removed.
 
     If no path is provided, the current working directory is used.
 
