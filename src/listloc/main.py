@@ -45,17 +45,18 @@ def extract(
     verbose: Annotated[bool, typer.Option(
         help="Print each file extracted from and every file or directory created or deleted.")] = False,
     prune: Annotated[bool, typer.Option(
-        help="Delete any extracted .listing files that no longer correspond to a declared listing in the source files.")] = False,
+        help="Delete any extracted [bold].listing[/bold] files that no longer correspond to a declared listing in the source files.")] = False,
     ):
     """
     Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
-    Each code listing is the content between `BEGIN LISTING <listing_name>` and `END LISTING`.
-    Extracted listings are saved as `.listing` files inside `listings/` directories.
+    Each code listing is the content between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan].
+    Extracted listings are saved as [bold].listing[/bold] files inside [bold]listings/[/bold] directories.
 
     If no directory path is provided, the current working directory is used.
 
-    Example: listloc extract ./my_project
+    Example: 
+        listloc extract ./my_project
     """
     extractor, logger = create_extractor(path, verbose)
     if prune:
@@ -69,13 +70,14 @@ def clear(path: Annotated[str, typer.Argument()] = os.getcwd(),
           verbose: Annotated[bool, typer.Option(
               help="Print every deleted file and directory")] = False):
     """
-    Recursively delete all extracted `.listing` files under the given directory.
+    Recursively delete all extracted [bold].listing[/bold] files under the given directory.
 
-    Any `listings/` directory that contains only `.listing` files will also be deleted.
+    Any [bold]listings/[/bold] directory left empty after the deletions will also be removed.
 
     If no path is provided, the current working directory is used.
 
-    Example: listloc clear ./my_project
+    Example: 
+        listloc clear ./my_project
     """
     extractor, logger = create_extractor(path, verbose)
     extractor.clear_all_listing_extractions()

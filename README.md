@@ -53,7 +53,7 @@ listloc clear [--verbose] [./path/to/project]
 ```
 
 - Recursively deletes all `.listing` files within the given directory.
-- Removes any `listings/` directories that are either empty or only contain `.listing` files.
+- Removes any remaining `listings/` directories left empty after the `.listing` file deletions.
 - `--verbose`: Prints every deleted file and directory.
 
 
