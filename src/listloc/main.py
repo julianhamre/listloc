@@ -1,9 +1,11 @@
 import typer
 from typing_extensions import Annotated
 from importlib.metadata import version, PackageNotFoundError
+from rich import print
 import os
 from listloc.extractor.listing_extractor import ListingExtractor
 from listloc.extractor.action_logger import ActionLogger
+from listloc.extractor.listing import ListingError
 
 
 app = typer.Typer(
@@ -35,9 +37,26 @@ def main(
         ):
     pass
 
+
+def run_and_hide_exception_traceback(command_runner, *args):
+    try:
+        command_runner(*args)
+    except (ListingError, NotADirectoryError, FileNotFoundError, PermissionError, UnicodeDecodeError) as e:
+        print(f"[bold red]Error:[/bold red] {e}")
+    except Exception as e:
+        print(f"[bold red]Unexpected error:[/bold red] {e}")
+    raise typer.Exit(1)
+
 def create_extractor(path: str, verbose: bool):
     logger = ActionLogger(path, verbose=verbose)
     return ListingExtractor(path, logger), logger
+
+def run_extract(path: str, verbose: bool, prune: bool):
+    extractor, logger = create_extractor(path, verbose)
+    if prune:
+        extractor.clear_all_listing_extractions()
+    extractor.extract_all_listings()
+    logger.summarize_or_note_no_extractions()
 
 @app.command()
 def extract(
@@ -57,12 +76,13 @@ def extract(
     Example: 
         listloc extract ./my_project
     """
-    extractor, logger = create_extractor(path, verbose)
-    if prune:
-        extractor.clear_all_listing_extractions()
-    extractor.extract_all_listings()
-    logger.summarize_or_note_no_extractions()
+    run_and_hide_exception_traceback(run_extract, path, verbose, prune)
 
+
+def run_clear(path: str, verbose: bool):
+    extractor, logger = create_extractor(path, verbose)
+    extractor.clear_all_listing_extractions()
+    logger.summarize_or_note_no_clearings()
 
 @app.command()
 def clear(path: Annotated[str, typer.Argument()] = os.getcwd(),
@@ -78,9 +98,8 @@ def clear(path: Annotated[str, typer.Argument()] = os.getcwd(),
     Example: 
         listloc clear ./my_project
     """
-    extractor, logger = create_extractor(path, verbose)
-    extractor.clear_all_listing_extractions()
-    logger.summarize_or_note_no_clearings()
+    run_and_hide_exception_traceback(run_clear, path, verbose)
+
 
 if __name__ == "__main__":
     app()
