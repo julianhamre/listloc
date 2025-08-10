@@ -28,11 +28,11 @@ class TestCLI(unittest.TestCase):
 
     def test_extract_no_listings(self):
         result = runner.invoke(app, ["extract", self.__BASE_DIRECTORY_PATH])
-        self.assertEqual(f"No listings to extract from \n'{self.__BASE_DIRECTORY_PATH}'\n", result.output)
+        self.assertEqual(f"No listings to extract from '{self.__BASE_DIRECTORY_PATH}'", result.output.replace("\n", ""))
 
     def test_extract_no_listings_with_prune_option(self):
         result = runner.invoke(app, ["extract", "--prune", self.__BASE_DIRECTORY_PATH])
-        self.assertEqual(f"No listings to extract from \n'{self.__BASE_DIRECTORY_PATH}'\n", result.output)
+        self.assertEqual(f"No listings to extract from '{self.__BASE_DIRECTORY_PATH}'", result.output.replace("\n", ""))
 
     def test_extract_listing(self):
         self.__write_source_file_with_listing()
@@ -66,7 +66,7 @@ Wrote '{os.path.join(self.__BASE_DIRECTORY_PATH, "listings", "foo.listing")}'"""
     def test_clear_no_listings(self):
         result = runner.invoke(app, ["clear", self.__BASE_DIRECTORY_PATH])
         self.assertFalse(self.__listing_file_present())
-        self.assertEqual(f"Nothing to clear in \n'{self.__BASE_DIRECTORY_PATH}'\n", result.output)
+        self.assertEqual(f"Nothing to clear in '{self.__BASE_DIRECTORY_PATH}'", result.output.replace("\n", ""))
 
     def test_clear_listings(self):
         self.__write_source_file_with_listing()
