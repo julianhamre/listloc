@@ -6,10 +6,11 @@ from listloc.extractor.listing_constants import ListingConstants
 
 class ListingExtractor:
 
-    def __init__(self, base_directory_path, action_logger: ActionLogger):
+    def __init__(self, base_directory_path, action_logger: ActionLogger, global_listing_directory=False):
         self.__validate_directory_path(base_directory_path)
         self.__base_directory_path = base_directory_path
         self.__logger = action_logger
+        self.__global_listing_directory = global_listing_directory
 
     def __validate_directory_path(self, path):
         if not os.path.isdir(path):
@@ -17,8 +18,11 @@ class ListingExtractor:
 
     def extract_all_listings(self):
         file_paths = self.__all_file_paths()
+        global_listing_directory_path = self.__global_listing_directory_path()
         for path in file_paths:
             file_extractor = FileExtractor(path, self.__logger)
+            if self.__global_listing_directory:
+                file_extractor.set_listing_directory(global_listing_directory_path)
             file_extractor.extract_listings()
     
     def __all_file_paths(self):
@@ -28,6 +32,11 @@ class ListingExtractor:
                 file_paths.append(os.path.join(root, file))
         return file_paths
     
+    def __global_listing_directory_path(self):
+        return os.path.join(
+            self.__base_directory_path, 
+            ListingConstants.LISTING_DIRECTORY_NAME)
+
     def clear_all_listing_extractions(self):
         directory_paths = self.__all_directory_paths()
         for directory in directory_paths:

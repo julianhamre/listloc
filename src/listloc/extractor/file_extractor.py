@@ -67,3 +67,6 @@ class FileExtractor:
         with open(write_path, "wt", encoding="utf-8") as f:
             f.write(listing.content)
             self.__logger.log_written_file(write_path)
+
+    def set_listing_directory(self, directory_path):
+        self.__listing_directory_path = directory_path
