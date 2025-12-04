@@ -35,9 +35,11 @@ def main(
         ):
     pass
 
-def create_extractor(path: str, verbose: bool):
+def create_extractor(path: str, verbose: bool, local_listing_dirs=False):
     logger = ActionLogger(path, verbose=verbose)
-    return ListingExtractor(path, logger), logger
+    return ListingExtractor(path, 
+                            logger, 
+                            global_listing_directory=not local_listing_dirs), logger
 
 @app.command()
 def extract(
@@ -46,18 +48,20 @@ def extract(
         help="Print each file extracted from and every file or directory created or deleted.")] = False,
     prune: Annotated[bool, typer.Option(
         help="Delete any extracted [bold].listing[/bold] files that no longer correspond to a declared listing in the source files.")] = False,
+    local_listing_dirs: Annotated[bool, typer.Option(
+        help="Create a listing directory in every directory containing files with declared listings.")] = False
     ):
     """
     Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
-    Each code listing includes the lines between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan], with any leading or trailing blank lines automatically removed. Extracted listings are saved as [bold].listing[/bold] files inside [bold]listings/[/bold] directories.
+    Each code listing includes the lines between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan], with any leading or trailing blank lines automatically removed. Extracted listings are saved as [bold].listing[/bold] files inside a [bold]listings/[/bold] directory, which by default will be located in the current working directory.
 
     If no directory path is provided, the current working directory is used.
 
     Example: 
         listloc extract ./my_project
     """
-    extractor, logger = create_extractor(path, verbose)
+    extractor, logger = create_extractor(path, verbose, local_listing_dirs=local_listing_dirs)
     if prune:
         extractor.clear_all_listing_extractions()
     extractor.extract_all_listings()
