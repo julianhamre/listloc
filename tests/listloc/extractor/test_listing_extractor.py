@@ -2,8 +2,8 @@ import unittest
 import os
 from src.listloc.extractor.listing_extractor import ListingExtractor, FileExtractor
 from src.listloc.extractor.listing_constants import ListingConstants
-from tests.listloc.extractor.file_creation_tools import FileCreationTools
-from tests.listloc.extractor.base_test_listing_extractor import BaseTestListingExtractor
+from tests.listloc.extractor.test_listing_extractor_tools.file_creation_tools import FileCreationTools
+from tests.listloc.extractor.test_listing_extractor_tools.base_test_listing_extractor import BaseTestListingExtractor
 from listloc.extractor.context.extractor_context import ExtractorContext
 import tempfile
 
