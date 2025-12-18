@@ -23,4 +23,4 @@ class TestListingExtractorGlobalDir(TestListingExtractor):
         self._assert_extracted_listings(self.__extract_paths, global_dir=True)
 
     def test_clear_all_listing_extractions(self):
-        self._assert_clear_all_listing_extractions(self.__extract_paths)
+        self._assert_listing_extractions_cleared(self.__extract_paths)

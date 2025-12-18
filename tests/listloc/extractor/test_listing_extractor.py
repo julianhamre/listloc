@@ -47,7 +47,7 @@ class TestListingExtractor(BaseTestListingExtractor):
         listing_directory_in_empty_dir = os.path.join(self._BASE_DIRECTORY_PATH, "dir1", "dir3", ListingConstants.LISTING_DIRECTORY_NAME)
         self.assertFalse(os.path.isdir(listing_directory_in_empty_dir))
 
-    def _assert_clear_all_listing_extractions(self, extract_paths):
+    def _assert_listing_extractions_cleared(self, extract_paths):
         self._listing_extractor.extract_all_listings()
         self._listing_extractor.clear_all_listing_extractions()
         for file_path in extract_paths:
