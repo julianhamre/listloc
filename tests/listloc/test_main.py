@@ -71,7 +71,7 @@ Wrote '{os.path.join(self.__BASE_DIRECTORY_PATH, "listings", "foo.listing")}'"""
     def test_clear_listings(self):
         self.__write_source_file_with_listing()
         self.__write_stale_listing_file()
-        runner.invoke(app, ["extract", self.__BASE_DIRECTORY_PATH])
+        runner.invoke(app, ["extract", "--no-prune", self.__BASE_DIRECTORY_PATH])
         result = runner.invoke(app, ["clear", self.__BASE_DIRECTORY_PATH])
         self.assertFalse(self.__listing_file_present())
         self.assertEqual(f"Deleted a total of 2 extracted listings\n", result.output)
@@ -79,7 +79,7 @@ Wrote '{os.path.join(self.__BASE_DIRECTORY_PATH, "listings", "foo.listing")}'"""
     def test_clear_with_verbose_option(self):
         self.__write_source_file_with_listing()
         self.__write_stale_listing_file()
-        runner.invoke(app, ["extract", self.__BASE_DIRECTORY_PATH])
+        runner.invoke(app, ["extract", "--no-prune", self.__BASE_DIRECTORY_PATH])
         result = runner.invoke(app, ["clear", "--verbose", self.__BASE_DIRECTORY_PATH])
         expected_detailed_log = f"""
 Deleted '{os.path.join(self.__BASE_DIRECTORY_PATH, "listings", "outdated.listing")}'

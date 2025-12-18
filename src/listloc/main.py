@@ -47,7 +47,7 @@ def extract(
     verbose: Annotated[bool, typer.Option(
         help="Print each file extracted from and every file or directory created or deleted.")] = False,
     prune: Annotated[bool, typer.Option(
-        help="Delete any extracted [bold].listing[/bold] files that no longer correspond to a declared listing in the source files.")] = False,
+        help="Delete any extracted [bold].listing[/bold] files that no longer correspond to a declared listing in the source files.")] = True,
     local_listing_dirs: Annotated[bool, typer.Option(
         help="Create a listing directory in every directory containing files with declared listings.")] = False
     ):
