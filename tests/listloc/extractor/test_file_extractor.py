@@ -3,7 +3,7 @@ import os
 import tempfile
 from src.listloc.extractor.file_extractor import FileExtractor
 from src.listloc.extractor.listing_constants import ListingConstants
-from src.listloc.extractor.action_logger import ActionLogger
+from listloc.extractor.extractor_context import ExtractorContext
 
 class TestFileExtractor(unittest.TestCase):
     __EXPECTED_LISTING_STRINGS = {
@@ -50,7 +50,7 @@ print('hello')
     def setUp(self):
         self.__temp_dir = tempfile.TemporaryDirectory()
         self.__BASE_DIRECTORY_PATH = self.__temp_dir.name
-        self.__logger = ActionLogger(self.__BASE_DIRECTORY_PATH)
+        self.__context = ExtractorContext(self.__BASE_DIRECTORY_PATH)
 
     def tearDown(self):
         self.__temp_dir.cleanup()
@@ -58,7 +58,7 @@ print('hello')
     def test_extract_listings(self):
         path = os.path.join(self.__BASE_DIRECTORY_PATH, "temp_code.py")
         self.__create_code_file(path, self.__EXAMPLE_CODE)
-        extractor = FileExtractor(path, self.__logger)
+        extractor = FileExtractor(path, self.__context)
         extractor.extract_listings()
         actual_listing_strings = self.__extract_listing_file_contents()
         self.assertEqual(self.__EXPECTED_LISTING_STRINGS, actual_listing_strings)
@@ -66,7 +66,7 @@ print('hello')
     def test_raise_when_invalid_declaration(self):
         path = os.path.join(self.__BASE_DIRECTORY_PATH, "invalid_source_file.py")
         self.__create_code_file(path, self.__INVALID_LISTING_DECLARATION)
-        extractor = FileExtractor(path, self.__logger)
+        extractor = FileExtractor(path, self.__context)
         expected_message = f"In file '{path}': The begin statement 'BEGIN LISTING name1 something else' should be in the format 'BEGIN LISTING <name>'"
         self.assertRaisesRegex(Exception, expected_message, extractor.extract_listings) 
 

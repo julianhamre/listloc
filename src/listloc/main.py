@@ -3,7 +3,7 @@ from typing_extensions import Annotated
 from importlib.metadata import version, PackageNotFoundError
 import os
 from listloc.extractor.listing_extractor import ListingExtractor
-from listloc.extractor.action_logger import ActionLogger
+from listloc.extractor.extractor_context import ExtractorContext
 
 
 app = typer.Typer(
@@ -36,10 +36,10 @@ def main(
     pass
 
 def create_extractor(path: str, verbose: bool, local_listing_dirs=False):
-    logger = ActionLogger(path, verbose=verbose)
+    context = ExtractorContext(path, verbose=verbose)
     return ListingExtractor(path, 
-                            logger, 
-                            global_listing_directory=not local_listing_dirs), logger
+                            context, 
+                            global_listing_directory=not local_listing_dirs), context.action_logger
 
 @app.command()
 def extract(

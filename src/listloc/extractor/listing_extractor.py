@@ -1,15 +1,15 @@
 import os
 from listloc.extractor.file_extractor import FileExtractor
-from listloc.extractor.action_logger import ActionLogger
+from listloc.extractor.extractor_context import ExtractorContext
 from listloc.extractor.listing_constants import ListingConstants
 
 
 class ListingExtractor:
 
-    def __init__(self, base_directory_path, action_logger: ActionLogger, global_listing_directory=False):
+    def __init__(self, base_directory_path, context: ExtractorContext, global_listing_directory=False):
         self.__validate_directory_path(base_directory_path)
         self.__base_directory_path = base_directory_path
-        self.__logger = action_logger
+        self.__context = context
         self.__global_listing_directory = global_listing_directory
 
     def __validate_directory_path(self, path):
@@ -20,10 +20,11 @@ class ListingExtractor:
         file_paths = self.__all_file_paths()
         global_listing_directory_path = self.__global_listing_directory_path()
         for path in file_paths:
-            file_extractor = FileExtractor(path, self.__logger)
+            file_extractor = FileExtractor(path, self.__context)
             if self.__global_listing_directory:
                 file_extractor.set_listing_directory(global_listing_directory_path)
             file_extractor.extract_listings()
+        self.__context.listing_name_logger.ensure_all_names_are_unique()
     
     def __all_file_paths(self):
         file_paths = []
@@ -55,7 +56,7 @@ class ListingExtractor:
         self.__delete_listing_files_in(directory_path)
         if self.__directory_is_empty(directory_path):
             os.rmdir(directory_path)
-            self.__logger.log_removed_directory(directory_path)
+            self.__context.action_logger.log_removed_directory(directory_path)
     
     def __is_listing_directory(self, directory_path):
         directory_name = os.path.basename(directory_path)
@@ -69,7 +70,7 @@ class ListingExtractor:
             if self.__is_listing_file(file):
                 file_path = os.path.join(directory_path, file)
                 os.remove(file_path)
-                self.__logger.log_deleted_file(file_path)
+                self.__context.action_logger.log_deleted_file(file_path)
     
     def __files_in_directory(self, directory_path):
         return os.listdir(directory_path)
