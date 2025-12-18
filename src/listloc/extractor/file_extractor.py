@@ -2,7 +2,7 @@ import re
 import os
 from listloc.extractor.listing_constants import ListingConstants
 from listloc.extractor.listing import Listing
-from listloc.extractor.extractor_context import ExtractorContext
+from listloc.extractor.context.extractor_context import ExtractorContext
 
 class FileExtractor:
 

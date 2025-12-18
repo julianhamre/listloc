@@ -1,5 +1,5 @@
-from listloc.extractor.action_logger import ActionLogger
-from listloc.extractor.listing_name_logger import ListingNameLogger
+from listloc.extractor.context.action_logger import ActionLogger
+from listloc.extractor.context.listing_name_logger import ListingNameLogger
 
 class ExtractorContext:
 

@@ -3,7 +3,7 @@ import os
 from src.listloc.extractor.listing_extractor import ListingExtractor, FileExtractor
 from src.listloc.extractor.listing_constants import ListingConstants
 from tests.listloc.extractor.file_creation_tools import FileCreationTools
-from listloc.extractor.extractor_context import ExtractorContext
+from listloc.extractor.context.extractor_context import ExtractorContext
 import tempfile
 
 class TestListingExtractor(unittest.TestCase):

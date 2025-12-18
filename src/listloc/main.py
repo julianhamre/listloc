@@ -3,7 +3,7 @@ from typing_extensions import Annotated
 from importlib.metadata import version, PackageNotFoundError
 import os
 from listloc.extractor.listing_extractor import ListingExtractor
-from listloc.extractor.extractor_context import ExtractorContext
+from listloc.extractor.context.extractor_context import ExtractorContext
 
 
 app = typer.Typer(

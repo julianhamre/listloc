@@ -1,6 +1,6 @@
 import os
 from listloc.extractor.file_extractor import FileExtractor
-from listloc.extractor.extractor_context import ExtractorContext
+from listloc.extractor.context.extractor_context import ExtractorContext
 from listloc.extractor.listing_constants import ListingConstants
 
 
