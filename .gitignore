@@ -1,5 +1,8 @@
 # Compiled files
 __pycache__/
 
+# OS generated files
+.DS_Store
+
 # VS code configuration files
 .vscode
