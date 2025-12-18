@@ -61,7 +61,7 @@ listloc extract [--prune] [--verbose] [./path/to/project]
 ```
 
 - Recursively scans UTF-8 source files in the given directory for listing declarations.
-- Each listing is extracted to a `.listing` file inside a `listings/` directory, which by default will be located in your current working directory.
+- Each listing is extracted to a `.listing` file inside a `listings/` directory located in the given directory.
 - `--prune`: Deletes any stale `.listing` files that no longer match any listings in the source files.
 - `--verbose`: Prints each file extracted from and every file or directory created or deleted.
 - `--local-listing-dirs`: Create a `listings/` directory in each subdirectory containing at least one listing declaration.
@@ -77,7 +77,7 @@ listloc clear [--verbose] [./path/to/project]
 - `--verbose`: Prints every deleted file and directory.
 
 
-If no directory path is provided for these commands, the current directory is used.
+If no directory path is provided for these commands, the current working directory is used.
 
 ### Examples
 
