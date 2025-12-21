@@ -57,12 +57,12 @@ The `--help` flag can also be used to view documentation.
 ### Extract Listings
 
 ```bash
-listloc extract [--prune] [--verbose] [./path/to/project]
+listloc extract [--no-prune] [--verbose] [./path/to/project]
 ```
 
 - Recursively scans UTF-8 source files in the given directory for listing declarations.
 - Each listing is extracted to a `.listing` file inside a `listings/` directory located in the given directory.
-- `--prune`: Deletes any stale `.listing` files that no longer match any listings in the source files. This is the default behavior.
+- By default, `extract` prunes stale `.listing` files that no longer match any listings in the source files; use `--no-prune` to keep them.
 - `--verbose`: Prints each file extracted from and every file or directory created or deleted.
 - `--local-listing-dirs`: Create a `listings/` directory in each subdirectory containing at least one listing declaration.
 
@@ -83,7 +83,7 @@ If no directory path is provided for these commands, the current working directo
 
 - `listloc extract`
 - `listloc clear --help`
-- `listloc extract --prune --verbose my_project`
+- `listloc extract --no-prune --verbose my_project`
 
 ---
 
