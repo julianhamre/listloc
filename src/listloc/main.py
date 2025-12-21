@@ -54,7 +54,7 @@ def extract(
     """
     Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
-    Each code listing includes the lines between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan], with any leading or trailing blank lines automatically removed. Extracted listings are saved as [bold].listing[/bold] files inside a [bold]listings/[/bold] directory located in the given directory.
+    Each code listing includes the lines between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan], with any leading or trailing blank lines automatically removed. Extracted listings are saved as [bold].listing[/bold] files inside a [bold]listings/[/bold] directory located in the given directory. Stale [bold].listing[/bold] files are deleted by default, and can be kept with the [bold]--no-prune[/bold] option.
 
     If no directory path is provided, the current working directory is used.
 
