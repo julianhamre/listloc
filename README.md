@@ -22,7 +22,7 @@ def greet(name):
 # END LISTING
 ```
 
-When extracted, a file named `greet.listing` is created in a `listings/` directory, which by default will be located in your current working directory. Every `.listing` file will contain the lines in between the listing declaration wrapper:
+When extracted, a file named `greet.listing` is created in a `listings/` directory. By default, all listings are written to a single `listings/` directory at the extraction root. Every `.listing` file will contain the lines in between the listing declaration wrapper:
 
 ```text
 def greet(name):
@@ -61,10 +61,9 @@ listloc extract [--no-prune] [--verbose] [./path/to/project]
 ```
 
 - Recursively scans UTF-8 source files in the given directory for listing declarations.
-- Each listing is extracted to a `.listing` file inside a `listings/` directory located in the given directory.
+- By default, all listings are extracted into a single `listings/` directory at the command path; use `--local-listing-dirs` to create one per directory containing listing declarations.
 - By default, `extract` prunes stale `.listing` files that no longer match any listings in the source files; use `--no-prune` to keep them.
 - `--verbose`: Prints each file extracted from and every file or directory created or deleted.
-- `--local-listing-dirs`: Create a `listings/` directory in each subdirectory containing at least one listing declaration.
 
 ### Clear Listings
 

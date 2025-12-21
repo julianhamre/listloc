@@ -49,12 +49,12 @@ def extract(
     prune: Annotated[bool, typer.Option(
         help="Delete any extracted [bold].listing[/bold] files that no longer correspond to a declared listing in the source files.")] = True,
     local_listing_dirs: Annotated[bool, typer.Option(
-        help="Create a listing directory in every directory containing files with declared listings.")] = False
+        help="Create a listings/ directory in every directory containing files with declared listings.")] = False
     ):
     """
     Recursively extract all declared code listings from UTF-8 encoded source files under the given directory.
 
-    Each code listing includes the lines between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan], with any leading or trailing blank lines automatically removed. Extracted listings are saved as [bold].listing[/bold] files inside a [bold]listings/[/bold] directory located in the given directory. Stale [bold].listing[/bold] files are deleted by default, and can be kept with the [bold]--no-prune[/bold] option.
+    Each code listing includes the lines between [cyan]BEGIN LISTING <listing_name>[/cyan] and [cyan]END LISTING[/cyan], with any leading or trailing blank lines automatically removed. By default, extracted listings are saved as [bold].listing[/bold] files inside a single [bold]listings/[/bold] directory at the extraction root; use [bold]--local-listing-dirs[/bold] to create per-directory listing folders. Stale [bold].listing[/bold] files are deleted by default, and can be kept with the [bold]--no-prune[/bold] option.
 
     If no directory path is provided, the current working directory is used.
 
