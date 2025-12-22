@@ -20,6 +20,8 @@ class ListingExtractor:
         file_paths = self.__all_file_paths()
         global_listing_directory_path = self.__global_listing_directory_path()
         for path in file_paths:
+            if self.__is_listing_file(path):
+                continue
             file_extractor = FileExtractor(path, self.__context)
             if self.__global_listing_directory:
                 file_extractor.set_listing_directory(global_listing_directory_path)
