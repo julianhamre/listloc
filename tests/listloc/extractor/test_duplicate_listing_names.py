@@ -17,6 +17,7 @@ class TestDuplicateListingNames(BaseTestListingExtractor):
         expected_message = f"""The listing name '{listing_name}' must only be used to name one listing. It is currently used:
 - 2 times in '{os.path.join(self._BASE_DIRECTORY_PATH, file_path)}'"""
         self.assertRaisesRegex(Exception, expected_message, self._listing_extractor.extract_all_listings)
+        self.__assert_no_listing_files_written()
 
     def test_multiple_equal_names(self):
         file11 = os.path.join("dir1", "file11")
@@ -33,3 +34,10 @@ class TestDuplicateListingNames(BaseTestListingExtractor):
 - 1 time in '{os.path.join(self._BASE_DIRECTORY_PATH, file21)}'
 - 2 times in '{os.path.join(self._BASE_DIRECTORY_PATH, file22)}'"""
         self.assertRaisesRegex(Exception, expected_message, self._listing_extractor.extract_all_listings)
+        self.__assert_no_listing_files_written()
+
+    def __assert_no_listing_files_written(self):
+        for _, _, files in os.walk(self._BASE_DIRECTORY_PATH):
+            for file in files:
+                if ListingExtractor.is_listing_file(file):
+                    self.fail("A listing file was written when a duplicate listing name was detected")

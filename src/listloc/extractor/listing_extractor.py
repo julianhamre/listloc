@@ -19,14 +19,16 @@ class ListingExtractor:
     def extract_all_listings(self):
         file_paths = self.__all_file_paths()
         global_listing_directory_path = self.__global_listing_directory_path()
+        file_extractors = []
         for path in file_paths:
-            if self.__is_listing_file(path):
+            if self.is_listing_file(path):
                 continue
             file_extractor = FileExtractor(path, self.__context)
+            file_extractors.append(file_extractor)
             if self.__global_listing_directory:
                 file_extractor.set_listing_directory(global_listing_directory_path)
-            file_extractor.extract_listings()
         self.__context.listing_name_logger.ensure_all_names_are_unique()
+        self.__write_listing_files(file_extractors)
     
     def __all_file_paths(self):
         file_paths = []
@@ -39,6 +41,10 @@ class ListingExtractor:
         return os.path.join(
             self.__base_directory_path, 
             ListingConstants.LISTING_DIRECTORY_NAME)
+    
+    def __write_listing_files(self, file_extractors):
+        for file_extractor in file_extractors:
+            file_extractor.write_listing_files()
 
     def clear_all_listing_extractions(self):
         directory_paths = self.__all_directory_paths()
@@ -69,7 +75,7 @@ class ListingExtractor:
     
     def __delete_listing_files_in(self, directory_path):
         for file in self.__files_in_directory(directory_path):
-            if self.__is_listing_file(file):
+            if self.is_listing_file(file):
                 file_path = os.path.join(directory_path, file)
                 os.remove(file_path)
                 self.__context.action_logger.log_deleted_file(file_path)
@@ -77,5 +83,6 @@ class ListingExtractor:
     def __files_in_directory(self, directory_path):
         return os.listdir(directory_path)
 
-    def __is_listing_file(self, file):
+    @staticmethod
+    def is_listing_file(file):
         return file.endswith(ListingConstants.LISTING_FILE_EXTENSION)

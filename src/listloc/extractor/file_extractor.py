@@ -11,24 +11,23 @@ class FileExtractor:
         self.__parent_directory_path = os.path.dirname(self.__source_file_path)
         self.__listing_directory_path = os.path.join(self.__parent_directory_path, ListingConstants.LISTING_DIRECTORY_NAME)
         self.__context = context
+        self.__listings = self.__read_listings()
+        self.__log_listing_names()
 
-    def extract_listings(self):
-        """
-        Extracts every valid code listing from the given source file and saves their contents 
-        in their own designated files. The listing files will be stored in their own directory
-        located in the directory of the code file that is extracted from. A valid listing is 
-        the content in between the statements 'BEGIN LISTING <name>' and 'END LISTING'. 
-        The <name> argument decides the listing file names.
-        """
+    def __read_listings(self):
         if not self.__is_utf8_encoding():
-            return
+            return []
         with open(self.__source_file_path, "rt", encoding="utf-8") as f:
             source_code = f.read()
             pattern = f"{Listing.BEGIN_STATEMENT}.*?{Listing.END_STATEMENT}"
             listing_strings = re.findall(pattern, source_code, flags=re.DOTALL)
             listings = self.__construct_listings(listing_strings)
             self.__context.action_logger.log_extracted(self.__source_file_path, len(listings))
-            self.__write_listing_files(listings)
+            return listings
+        
+    def __log_listing_names(self):
+        for listing in self.__listings:
+            self.__context.listing_name_logger.log_name_appearance(listing.name, self.__source_file_path)
 
     def __is_utf8_encoding(self, blocksize=8192):
         try:
@@ -49,11 +48,10 @@ class FileExtractor:
                 raise type(e)(f"In file '{self.__source_file_path}': {e}") from e
         return listings
    
-    def __write_listing_files(self, listings):
-        if listings:
+    def write_listing_files(self):
+        if self.__listings:
             self.__create_directory_if_absent()
-        for listing in listings:
-            self.__context.listing_name_logger.log_name_appearance(listing.name, self.__source_file_path)
+        for listing in self.__listings:
             self.__write_listing_file(listing)
 
     def __create_directory_if_absent(self):
