@@ -29,7 +29,7 @@ class TestListing(unittest.TestCase):
                            "BEGIN LISTING name2 \n    print('Hello world')\n\n % END LISTING",
                            "BEGIN LISTING NaMe_03\n\n\n    print('one')\n\n\n\nprint('two')\n    a = 1 + 2\n# END LISTING"]
         expected_content_strings = ["print('hello')", 
-                                    "    print('Hello world')",
+                                    "print('Hello world')",
                                     "    print('one')\n\n\n\nprint('two')\n    a = 1 + 2"]
         for i in range(len(listing_strings)):
             self.__assert_correct_content(listing_strings[i], expected_content_strings[i])

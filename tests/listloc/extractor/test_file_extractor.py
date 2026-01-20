@@ -47,6 +47,20 @@ print('hello')
 # END LISTING
 """
 
+    __INDENTED_LISTING = """
+def summarize(numbers):
+    sum = 0
+
+    # BEGIN LISTING indented_listing
+
+    for number in numbers:
+        sum += number
+    
+    # END LISTING
+
+    return sum
+    """
+
     def setUp(self):
         self.__temp_dir = tempfile.TemporaryDirectory()
         self.__BASE_DIRECTORY_PATH = self.__temp_dir.name
@@ -68,6 +82,16 @@ print('hello')
         self.__create_code_file(path, self.__INVALID_LISTING_DECLARATION)
         expected_message = f"In file '{path}': The begin statement 'BEGIN LISTING name1 something else' should be in the format 'BEGIN LISTING <name>'"
         self.assertRaisesRegex(Exception, expected_message, FileExtractor, *(path, self.__context)) 
+
+    def test_shared_indentation_removed(self):
+        path = os.path.join(self.__BASE_DIRECTORY_PATH, "indented_listing.py")
+        self.__create_code_file(path, self.__INDENTED_LISTING)
+        extractor = FileExtractor(path, self.__context)
+        extractor.write_listing_files()
+        expected_listing_string = "for number in numbers:\n    sum += number"
+        listing_file = f"indented_listing{ListingConstants.LISTING_FILE_EXTENSION}"
+        actual_listing_string = self.__extract_listing_file_contents()[listing_file]
+        self.assertEqual(expected_listing_string, actual_listing_string)
 
     def __create_code_file(self, path, code_file_content):
         with open(path, "wt", encoding="utf-8") as f:

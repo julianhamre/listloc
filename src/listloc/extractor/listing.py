@@ -18,7 +18,8 @@ class Listing:
         
     def __extract_content(self):
         statement_lines_removed = self.__listing_lines[1:-1]
-        content_lines = self.__surrounding_empty_lines_removed(statement_lines_removed)
+        surrounding_empty_lines_removed = self.__surrounding_empty_lines_removed(statement_lines_removed)
+        content_lines = self.__shared_indentation_removed(surrounding_empty_lines_removed)
         return "\n".join(content_lines)
     
     def __surrounding_empty_lines_removed(self, lines):
@@ -31,6 +32,30 @@ class Listing:
             lines_copy = lines_copy[:-1]
         return lines_copy
     
+    def __shared_indentation_removed(self, string_lines):
+        if not string_lines:
+            return []
+        indentations = []
+        for line in string_lines:
+            indentations.append(self.__indentation(line))
+        shared_indentation = min(indentations)
+        return self.__indentation_removed(shared_indentation, string_lines)
+    
+    def __indentation(self, string_line):
+        indentation = 0
+        for character in string_line:
+            if character == " ":
+                indentation += 1
+            else:
+                break
+        return indentation
+
+    def __indentation_removed(self, indentation, string_lines):
+        indentation_removed = []
+        for line in string_lines:
+            indentation_removed.append(line[indentation:])
+        return indentation_removed
+
     def __validate_listing(self):
         self.__validate_statement_lines()
         self.__validate_content()
